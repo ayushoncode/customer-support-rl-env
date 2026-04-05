@@ -13,6 +13,10 @@ app = FastAPI(
 
 env = SupportEnv()
 
+@app.get("/")
+def root():
+    return {"message": "Customer Support RL Environment is Running", "health": "/health", "docs": "/docs", "tasks": "/tasks"}
+
 
 @app.get("/health")
 def health():
