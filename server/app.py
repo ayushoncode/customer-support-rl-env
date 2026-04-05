@@ -1,3 +1,4 @@
+import uvicorn
 from app.env import SupportEnv, TASKS
 from app.models import ResetRequest, StepRequest, SupportAction
 from fastapi import FastAPI, HTTPException
@@ -17,7 +18,7 @@ def health():
 def reset(request: ResetRequest = None):
     difficulty = request.difficulty if request else "easy"
     if difficulty not in TASKS:
-        raise HTTPException(status_code=400, detail=f"Invalid difficulty")
+        raise HTTPException(status_code=400, detail="Invalid difficulty")
     obs = env.reset(difficulty=difficulty)
     return obs.model_dump()
 
@@ -39,3 +40,9 @@ def list_tasks():
         for task in task_list:
             all_tasks.append({"id": task["id"], "difficulty": difficulty, "email": task["email"]})
     return {"tasks": all_tasks, "total": len(all_tasks)}
+
+def main():
+    uvicorn.run(app, host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
