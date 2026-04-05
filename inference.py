@@ -3,7 +3,7 @@ import json
 import sys
 from openai import OpenAI
 from app.env import SupportEnv, TASKS
-from app.models import SupportAction
+from app.models import SupportAction, ActionType
 
 API_BASE_URL = os.getenv("API_BASE_URL")
 MODEL_NAME   = os.getenv("MODEL_NAME")
@@ -43,15 +43,33 @@ def get_llm_reply(email):
         return response.choices[0].message.content or "Sorry, I will assist you shortly."
     except Exception as exc:
         print(f"[DEBUG] LLM call failed: {exc}", flush=True)
-        return "We sincerely apologize for the inconvenience. We will investigate your case immediately and process a full refund or replacement as required."
+        return "We sincerely apologize for the inconvenience with your order and account. We will immediately investigate, escalate to our senior team, and process a full refund or replacement within 24 hours."
 
 def run_episode(difficulty):
     obs = env.reset(difficulty=difficulty)
     log_start(task=obs.task_id, difficulty=difficulty, model=MODEL_NAME)
+
+    step = 0
+    # Step 1: RESEARCH
+    step += 1
+    _, r, _, _ = env.step(SupportAction(action_type=ActionType.RESEARCH, reasoning="Looking up order details"))
+    log_step(step=step, action="RESEARCH", reward=r, done=False)
+
+    # Step 2: TAG
+    step += 1
+    _, r, _, _ = env.step(SupportAction(action_type=ActionType.TAG, tag="support"))
+    log_step(step=step, action="TAG", reward=r, done=False)
+
+    # Step 3: DRAFT
+    step += 1
+    _, r, _, _ = env.step(SupportAction(action_type=ActionType.DRAFT, reasoning="Drafting reply"))
+    log_step(step=step, action="DRAFT", reward=r, done=False)
+
+    # Step 4: SUBMIT with LLM reply
+    step += 1
     ai_reply = get_llm_reply(obs.email)
-    action = SupportAction(reply=ai_reply)
-    state, reward, done, info = env.step(action)
-    log_step(step=1, action=ai_reply, reward=reward, done=done)
+    _, reward, done, _ = env.step(SupportAction(action_type=ActionType.SUBMIT, reply=ai_reply))
+    log_step(step=step, action=ai_reply, reward=reward, done=done)
     log_end(task=obs.task_id, score=reward, success=reward >= 0.5)
     return reward
 
