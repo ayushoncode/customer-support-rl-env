@@ -1,0 +1,67 @@
+name: CustomerSupportEnv
+version: "1.0.0"
+description: >
+  An RL environment where an AI agent must respond to customer support emails
+  with empathy, correct solutions, and professional language.
+
+endpoints:
+  reset:
+    method: POST
+    path: /reset
+  step:
+    method: POST
+    path: /step
+  state:
+    method: GET
+    path: /state
+  health:
+    method: GET
+    path: /health
+
+observation_space:
+  email:
+    type: string
+  history:
+    type: array
+  difficulty:
+    type: string
+  task_id:
+    type: string
+
+action_space:
+  reply:
+    type: string
+
+reward:
+  range: [0.0, 1.0]
+  components:
+    - name: empathy
+      weight: 0.3
+    - name: solution
+      weight: 0.4
+    - name: completeness
+      weight: 0.2
+    - name: personalisation
+      weight: 0.1
+
+tasks:
+  - id: easy_refund
+    difficulty: easy
+  - id: easy_tracking
+    difficulty: easy
+  - id: medium_wrong_item
+    difficulty: medium
+  - id: medium_billing
+    difficulty: medium
+  - id: hard_missing_laptop
+    difficulty: hard
+  - id: hard_fraud
+    difficulty: hard
+
+environment_variables:
+  API_BASE_URL:
+    required: true
+  MODEL_NAME:
+    required: true
+  HF_TOKEN:
+    required: true
