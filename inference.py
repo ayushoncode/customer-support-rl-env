@@ -5,12 +5,13 @@ from openai import OpenAI
 from app.env import SupportEnv, TASKS
 from app.models import SupportAction, ActionType
 
-API_BASE_URL = os.getenv("API_BASE_URL")
-MODEL_NAME   = os.getenv("MODEL_NAME")
-HF_TOKEN     = os.getenv("HF_TOKEN")
+API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
+MODEL_NAME   = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
+HF_TOKEN     = os.getenv("HF_TOKEN", "")
 
-if not API_BASE_URL or not MODEL_NAME or not HF_TOKEN:
-    raise ValueError("Missing required environment variables: API_BASE_URL, MODEL_NAME, HF_TOKEN")
+if not HF_TOKEN:
+    print(json.dumps({"event": "ERROR", "message": "HF_TOKEN not set"}), flush=True)
+    sys.exit(1)
 
 client = OpenAI(base_url=API_BASE_URL.rstrip("/"), api_key=HF_TOKEN)
 env    = SupportEnv()
