@@ -38,7 +38,9 @@ def score_reply(reply, task):
     solution = 0.4 if any(w in reply for w in ["refund","replac","escalat","investigat","secur"]) else 0.0
     complete = 0.2 if len(reply.split()) >= 40 else (0.1 if len(reply.split()) >= 20 else 0.0)
     personal = 0.1 if any(w in reply for w in ["your","you","order","account"]) else 0.0
-    return round(min(empathy + solution + complete + personal, 1.0), 2)
+    raw = empathy + solution + complete + personal
+    raw = max(0.01, min(raw, 0.99))
+    return round(raw, 2)
 
 if __name__ == "__main__":
     all_scores = []
