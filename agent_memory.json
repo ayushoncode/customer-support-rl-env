@@ -1,0 +1,132 @@
+{
+  "lessons": [
+    {
+      "lesson": "HIGH SCORE (1.00) on tracking ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 1,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-19T18:23:52.275356"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on billing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 2,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "timestamp": "2026-04-19T18:23:52.275833"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on missing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 3,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "timestamp": "2026-04-19T18:23:52.276196"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on refund ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 4,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-19T18:23:52.276538"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on wrong_item ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 5,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "timestamp": "2026-04-19T18:23:52.276888"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on missing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 6,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "timestamp": "2026-04-19T18:23:52.277262"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on tracking ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 7,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-19T18:23:52.277588"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on billing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 8,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "timestamp": "2026-04-19T18:23:52.278024"
+    },
+    {
+      "lesson": "HIGH SCORE (1.00) on fraud ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "episode": 9,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "timestamp": "2026-04-19T18:23:52.278475"
+    }
+  ],
+  "episode_history": [
+    {
+      "episode": 1,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-19T18:23:52.275517"
+    },
+    {
+      "episode": 2,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-19T18:23:52.275919"
+    },
+    {
+      "episode": 3,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-19T18:23:52.276276"
+    },
+    {
+      "episode": 4,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-19T18:23:52.276647"
+    },
+    {
+      "episode": 5,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-19T18:23:52.276983"
+    },
+    {
+      "episode": 6,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-19T18:23:52.277364"
+    },
+    {
+      "episode": 7,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-19T18:23:52.277699"
+    },
+    {
+      "episode": 8,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-19T18:23:52.278151"
+    },
+    {
+      "episode": 9,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-19T18:23:52.278602"
+    }
+  ]
+}
