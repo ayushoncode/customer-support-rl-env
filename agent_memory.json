@@ -1,67 +1,39 @@
 {
   "lessons": [
     {
-      "lesson": "HIGH SCORE (1.00) on tracking ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "lesson": "For refund requests, ensure you express more empathy and fully explain the steps you will take to resolve the issue, which will help build trust and satisfaction with the customer.",
       "episode": 1,
       "reward": 1.0,
       "difficulty": "easy",
-      "timestamp": "2026-04-19T18:23:52.275356"
+      "timestamp": "2026-04-19T18:30:34.068235"
     },
     {
-      "lesson": "HIGH SCORE (1.00) on billing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "lesson": "For billing issues, ensure you provide a clear, actionable next step after escalation, such as informing the customer when they can expect a resolution or a follow-up call.",
       "episode": 2,
       "reward": 1.0,
       "difficulty": "medium",
-      "timestamp": "2026-04-19T18:23:52.275833"
+      "timestamp": "2026-04-19T18:30:55.936079"
     },
     {
-      "lesson": "HIGH SCORE (1.00) on missing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "lesson": "For high-value order issues, ensure your response conveys both empathy and a clear, actionable solution to address the customer's immediate concerns.",
       "episode": 3,
       "reward": 1.0,
       "difficulty": "hard",
-      "timestamp": "2026-04-19T18:23:52.276196"
+      "timestamp": "2026-04-19T18:31:20.763281"
     },
     {
-      "lesson": "HIGH SCORE (1.00) on refund ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "lesson": "For refund requests, ensure you express more empathy and provide a complete solution by confirming the expected time frame for the refund to be processed and visible in the customer's account.",
       "episode": 4,
       "reward": 1.0,
       "difficulty": "easy",
-      "timestamp": "2026-04-19T18:23:52.276538"
+      "timestamp": "2026-04-19T18:31:34.382972"
     },
     {
-      "lesson": "HIGH SCORE (1.00) on wrong_item ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
+      "lesson": "For billing issues, ensure your solution is clear and complete by providing specific steps or a timeline for resolution, in addition to showing empathy and urgency.",
       "episode": 5,
       "reward": 1.0,
       "difficulty": "medium",
-      "timestamp": "2026-04-19T18:23:52.276888"
-    },
-    {
-      "lesson": "HIGH SCORE (1.00) on missing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
-      "episode": 6,
-      "reward": 1.0,
-      "difficulty": "hard",
-      "timestamp": "2026-04-19T18:23:52.277262"
-    },
-    {
-      "lesson": "HIGH SCORE (1.00) on tracking ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
-      "episode": 7,
-      "reward": 1.0,
-      "difficulty": "easy",
-      "timestamp": "2026-04-19T18:23:52.277588"
-    },
-    {
-      "lesson": "HIGH SCORE (1.00) on billing ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
-      "episode": 8,
-      "reward": 1.0,
-      "difficulty": "medium",
-      "timestamp": "2026-04-19T18:23:52.278024"
-    },
-    {
-      "lesson": "HIGH SCORE (1.00) on fraud ticket. Strategy worked well: empathetic language + clear solution + correct escalation. Replicate this approach.",
-      "episode": 9,
-      "reward": 1.0,
-      "difficulty": "hard",
-      "timestamp": "2026-04-19T18:23:52.278475"
+      "timestamp": "2026-04-19T18:31:55.476793"
     }
   ],
   "episode_history": [
@@ -69,64 +41,36 @@
       "episode": 1,
       "reward": 1.0,
       "difficulty": "easy",
-      "task_id": "easy_tracking",
-      "timestamp": "2026-04-19T18:23:52.275517"
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-19T18:30:34.069622"
     },
     {
       "episode": 2,
       "reward": 1.0,
       "difficulty": "medium",
       "task_id": "medium_billing",
-      "timestamp": "2026-04-19T18:23:52.275919"
+      "timestamp": "2026-04-19T18:30:55.937836"
     },
     {
       "episode": 3,
       "reward": 1.0,
       "difficulty": "hard",
       "task_id": "hard_missing_laptop",
-      "timestamp": "2026-04-19T18:23:52.276276"
+      "timestamp": "2026-04-19T18:31:20.765181"
     },
     {
       "episode": 4,
       "reward": 1.0,
       "difficulty": "easy",
       "task_id": "easy_refund",
-      "timestamp": "2026-04-19T18:23:52.276647"
+      "timestamp": "2026-04-19T18:31:34.384132"
     },
     {
       "episode": 5,
       "reward": 1.0,
       "difficulty": "medium",
-      "task_id": "medium_wrong_item",
-      "timestamp": "2026-04-19T18:23:52.276983"
-    },
-    {
-      "episode": 6,
-      "reward": 1.0,
-      "difficulty": "hard",
-      "task_id": "hard_missing_laptop",
-      "timestamp": "2026-04-19T18:23:52.277364"
-    },
-    {
-      "episode": 7,
-      "reward": 1.0,
-      "difficulty": "easy",
-      "task_id": "easy_tracking",
-      "timestamp": "2026-04-19T18:23:52.277699"
-    },
-    {
-      "episode": 8,
-      "reward": 1.0,
-      "difficulty": "medium",
       "task_id": "medium_billing",
-      "timestamp": "2026-04-19T18:23:52.278151"
-    },
-    {
-      "episode": 9,
-      "reward": 1.0,
-      "difficulty": "hard",
-      "task_id": "hard_fraud",
-      "timestamp": "2026-04-19T18:23:52.278602"
+      "timestamp": "2026-04-19T18:31:55.478641"
     }
   ]
 }
