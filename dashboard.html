@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SupportOps AI — Multi-Agent RL Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #18181f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0f0f5;
+  --muted: #6b6b80;
+  --dim: #3a3a50;
+  --green: #00e5a0;
+  --green-dim: rgba(0,229,160,0.12);
+  --blue: #4d9fff;
+  --blue-dim: rgba(77,159,255,0.12);
+  --amber: #ffb830;
+  --amber-dim: rgba(255,184,48,0.12);
+  --red: #ff5c5c;
+  --red-dim: rgba(255,92,92,0.12);
+  --purple: #b06aff;
+  --purple-dim: rgba(176,106,255,0.12);
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* Header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.header-left { display: flex; flex-direction: column; gap: 4px; }
+.logo {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.header h1 span { color: var(--green); }
+.header-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+.status-dot.running { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 0.6s infinite; }
+
+/* Metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  transition: border-color 0.2s;
+}
+.metric:hover { border-color: var(--border2); }
+.metric-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--mono);
+  margin-bottom: 8px;
+}
+.metric-value {
+  font-size: 28px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: -0.02em;
+  transition: color 0.3s;
+}
+.metric-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.controls-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-right: 4px;
+}
+.diff-btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.diff-btn:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+.diff-btn.easy.active { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.diff-btn.medium.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+.diff-btn.hard.active { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+.run-btn {
+  margin-left: auto;
+  padding: 9px 24px;
+  border-radius: 8px;
+  border: 1px solid var(--green);
+  background: var(--green-dim);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.run-btn:hover { background: var(--green); color: var(--bg); }
+.run-btn:active { transform: scale(0.97); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Main grid */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: border-color 0.2s;
+}
+.card-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-head-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--mono);
+}
+
+/* Agent pipeline */
+.agent-item {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.agent-item:last-child { border-bottom: none; }
+.agent-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  text-align: center;
+}
+.agent-info { display: flex; flex-direction: column; gap: 2px; }
+.agent-name { font-size: 13px; font-weight: 500; }
+.agent-desc { font-size: 11px; color: var(--muted); }
+.agent-badge {
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+.agent-badge.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+.agent-badge.done { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.agent-badge.skip { border-color: var(--dim); color: var(--dim); }
+.agent-badge.warn { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+/* Reward bars */
+.rbar-row { margin-bottom: 12px; }
+.rbar-row:last-child { margin-bottom: 0; }
+.rbar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.rbar-name { color: var(--muted); }
+.rbar-val { font-family: var(--mono); font-size: 12px; color: var(--text); }
+.rbar-track {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.rbar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+/* Ticket panel */
+.full-row { margin-bottom: 10px; }
+.email-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.from-tag {
+  padding: 2px 8px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  border-radius: 4px;
+  font-size: 10px;
+}
+.email-body {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  min-height: 54px;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+.reply-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.agent-tag {
+  padding: 2px 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  color: var(--green);
+  border-radius: 4px;
+  font-size: 10px;
+}
+.reply-body {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+  min-height: 80px;
+}
+.typing-cursor::after {
+  content: '▋';
+  animation: blink 1s infinite;
+  color: var(--green);
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Bottom grid */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+}
+
+/* Reward curve */
+.curve-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 100px;
+  padding: 0 4px;
+}
+.curve-bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  min-height: 4px;
+  cursor: default;
+}
+.curve-bar:hover::after {
+  content: attr(data-val);
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+.curve-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* Lessons */
+.lesson-item {
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.lesson-item:hover { border-color: var(--border2); }
+.lesson-item:last-child { margin-bottom: 0; }
+.lesson-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.lesson-ep-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--purple);
+  background: var(--purple-dim);
+  border: 1px solid var(--purple);
+  padding: 1px 7px;
+  border-radius: 3px;
+}
+.lesson-diff-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 3px;
+}
+.lesson-score {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.lesson-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.empty-state { font-size: 13px; color: var(--dim); text-align: center; padding: 20px 0; font-family: var(--mono); }
+
+/* Escalation flag */
+.esc-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--red);
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  display: none;
+}
+
+/* Trend indicator */
+.trend { font-size: 12px; font-family: var(--mono); margin-top: 8px; }
+.trend.up { color: var(--green); }
+.trend.down { color: var(--red); }
+.trend.flat { color: var(--muted); }
+
+/* Animations */
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+.fadein { animation: fadeIn 0.3s ease both; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">&#9632; OpenEnv × Meta PyTorch Hackathon</div>
+      <h1>SupportOps <span>AI</span></h1>
+      <div class="header-sub">Multi-Agent Customer Support RL Environment — Round 2</div>
+    </div>
+    <div class="status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">READY</span>
+    </div>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Episodes</div>
+      <div class="metric-value" id="m-ep" style="color:var(--blue)">0</div>
+      <div class="metric-sub">total run</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Avg reward</div>
+      <div class="metric-value" id="m-avg" style="color:var(--text)">—</div>
+      <div class="metric-sub">all episodes</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Lessons</div>
+      <div class="metric-value" id="m-lessons" style="color:var(--purple)">0</div>
+      <div class="metric-sub">in memory</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Best score</div>
+      <div class="metric-value" id="m-best" style="color:var(--green)">—</div>
+      <div class="metric-sub">single episode</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <span class="controls-label">Difficulty:</span>
+    <button class="diff-btn easy active" onclick="setDiff('easy',this)">Easy</button>
+    <button class="diff-btn medium" onclick="setDiff('medium',this)">Medium</button>
+    <button class="diff-btn hard" onclick="setDiff('hard',this)">Hard</button>
+    <button class="run-btn" id="run-btn" onclick="runEpisode()">▶ Run Episode</button>
+  </div>
+
+  <!-- Main grid -->
+  <div class="main-grid">
+
+    <!-- Agent Pipeline -->
+    <div class="card">
+      <div class="card-head">
+        Agent Pipeline
+        <span class="card-head-tag" style="color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:4px;" id="pipe-step">idle</span>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">01</div>
+        <div class="agent-info">
+          <div class="agent-name">Triage Agent</div>
+          <div class="agent-desc">Classifies urgency, type, escalation need</div>
+        </div>
+        <div class="agent-badge" id="ab-triage">waiting</div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">02</div>
+        <div class="agent-info">
+          <div class="agent-name">Research Agent</div>
+          <div class="agent-desc">Looks up order DB + policy rules</div>
+        </div>
+        <div class="agent-badge" id="ab-research">waiting</div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">03</div>
+        <div class="agent-info">
+          <div class="agent-name">Resolver Agent</div>
+          <div class="agent-desc">Drafts empathetic customer reply</div>
+        </div>
+        <div class="agent-badge" id="ab-resolver">waiting</div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">04</div>
+        <div class="agent-info">
+          <div class="agent-name">QA Agent</div>
+          <div class="agent-desc">Checks hallucinations + policy violations</div>
+        </div>
+        <div class="agent-badge" id="ab-qa">waiting</div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">05</div>
+        <div class="agent-info">
+          <div class="agent-name">Escalation Agent</div>
+          <div class="agent-desc">Handles fraud + legal threats</div>
+        </div>
+        <div class="agent-badge" id="ab-escalation">waiting</div>
+      </div>
+      <div class="agent-item">
+        <div class="agent-num">06</div>
+        <div class="agent-info">
+          <div class="agent-name">Critic Agent</div>
+          <div class="agent-desc">Writes lesson for next episode</div>
+        </div>
+        <div class="agent-badge" id="ab-critic">waiting</div>
+      </div>
+    </div>
+
+    <!-- Rewards -->
+    <div class="card">
+      <div class="card-head">Step Rewards</div>
+      <div class="rbar-row">
+        <div class="rbar-top"><span class="rbar-name">Research (+0.10)</span><span class="rbar-val" id="rv-research">+0.00</span></div>
+        <div class="rbar-track"><div class="rbar-fill" id="rb-research" style="background:var(--blue)"></div></div>
+      </div>
+      <div class="rbar-row">
+        <div class="rbar-top"><span class="rbar-name">Tag (+0.10)</span><span class="rbar-val" id="rv-tag">+0.00</span></div>
+        <div class="rbar-track"><div class="rbar-fill" id="rb-tag" style="background:var(--blue)"></div></div>
+      </div>
+      <div class="rbar-row">
+        <div class="rbar-top"><span class="rbar-name">Draft (+0.15)</span><span class="rbar-val" id="rv-draft">+0.00</span></div>
+        <div class="rbar-track"><div class="rbar-fill" id="rb-draft" style="background:var(--purple)"></div></div>
+      </div>
+      <div class="rbar-row">
+        <div class="rbar-top"><span class="rbar-name">Submit (empathy+solution+completeness)</span><span class="rbar-val" id="rv-submit">+0.00</span></div>
+        <div class="rbar-track"><div class="rbar-fill" id="rb-submit" style="background:var(--green)"></div></div>
+      </div>
+      <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+      <div class="rbar-row">
+        <div class="rbar-top">
+          <span class="rbar-name" style="font-weight:600;color:var(--text)">Total Reward</span>
+          <span class="rbar-val" id="rv-total" style="font-size:16px;color:var(--green)">0.00</span>
+        </div>
+        <div class="rbar-track" style="height:6px;"><div class="rbar-fill" id="rb-total" style="background:var(--green)"></div></div>
+      </div>
+
+      <!-- Frustration meter -->
+      <div style="margin-top:16px;">
+        <div class="rbar-top" style="margin-bottom:5px;">
+          <span class="rbar-name" style="color:var(--red)">Frustration Meter</span>
+          <span class="rbar-val" id="rv-frustration" style="color:var(--red)">0</span>
+        </div>
+        <div class="rbar-track"><div class="rbar-fill" id="rb-frustration" style="background:var(--red)"></div></div>
+        <div style="font-size:10px;color:var(--dim);margin-top:4px;font-family:var(--mono)">100 = customer churned = -1.0 penalty</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket + Reply -->
+  <div class="full-row card">
+    <div class="card-head">
+      Live Ticket
+      <div id="ticket-tags" style="display:flex;gap:6px;"></div>
+    </div>
+    <div id="esc-flag" class="esc-flag">⚠ ESCALATION TRIGGERED — Legal / Fraud Detected</div>
+    <div class="email-label">
+      <span>Customer Email</span>
+      <span class="from-tag">INBOUND</span>
+    </div>
+    <div class="email-body" id="email-body">Click "Run Episode" to simulate a live customer ticket...</div>
+    <div class="reply-label">
+      <span>Agent Reply</span>
+      <span class="agent-tag">AI GENERATED</span>
+    </div>
+    <div class="reply-body" id="reply-body">Reply will appear here after episode completes.</div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-grid">
+
+    <!-- Curve -->
+    <div class="card">
+      <div class="card-head">Reward Curve — Self-Improvement Over Episodes</div>
+      <div class="curve-area" id="curve-area">
+        <div class="empty-state" style="width:100%;">no episodes yet</div>
+      </div>
+      <div class="curve-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Easy</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Medium</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Hard</div>
+      </div>
+      <div class="trend" id="trend-label"></div>
+    </div>
+
+    <!-- Lessons -->
+    <div class="card">
+      <div class="card-head">
+        Critic Agent — Lessons Learned
+        <span style="font-family:var(--mono);font-size:10px;color:var(--purple)" id="lesson-count">0 stored</span>
+      </div>
+      <div id="lessons-wrap">
+        <div class="empty-state">run an episode to generate lessons</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TASKS = {
+  easy: [
+    { email:"Hi, my order #ORD-4521 is delayed by 2 weeks. I would like a full refund please.", type:"refund", order:"ORD-4521", item:"Wireless Headphones", amount:89.99, escalate:false },
+    { email:"Hello, I placed an order 5 days ago and have not received any tracking information. Can you help me track it?", type:"tracking", order:null, escalate:false }
+  ],
+  medium: [
+    { email:"I received the completely wrong item and it arrived damaged. This is totally unacceptable. I want this resolved immediately.", type:"wrong_item", order:"ORD-3310", item:"USB Hub", amount:24.99, escalate:false },
+    { email:"I was charged twice for the same order #ORD-6612. I want my money back NOW. This is ridiculous.", type:"billing", order:"ORD-6612", item:"Monitor", amount:399.99, escalate:false }
+  ],
+  hard: [
+    { email:"I am absolutely furious! My $1,200 laptop from order #ORD-9921 has been missing for 3 weeks. Fix this NOW or I am calling my lawyer!", type:"missing", order:"ORD-9921", item:"Dell Laptop", amount:1200, escalate:true },
+    { email:"Someone used my account to make unauthorized purchases totaling $800. I am disputing this with my bank right now!", type:"fraud", order:null, escalate:true }
+  ]
+};
+
+const REPLIES = {
+  refund: "Dear valued customer,\n\nI sincerely apologize for the delay with your order #ORD-4521 for the Wireless Headphones. I completely understand how frustrating this must be, and I'm sorry for the inconvenience this has caused.\n\nI have reviewed your account and confirmed your refund eligibility. A full refund of $89.99 will be processed back to your original payment method within 3–5 business days. You'll receive a confirmation email once initiated.\n\nThank you for your patience. We value your trust.",
+  tracking: "Dear valued customer,\n\nI apologize for the lack of tracking updates on your recent order — I completely understand how important it is to know the status of your shipment.\n\nI've looked into your order and confirmed it has been dispatched from our facility. Your tracking information will be updated and emailed to you within 24 hours. Please don't hesitate to reach out if you need anything else.\n\nThank you for your patience.",
+  wrong_item: "Dear valued customer,\n\nI sincerely apologize for receiving the wrong item — and that it arrived damaged. This is absolutely unacceptable and falls well short of our standards. I completely understand your frustration.\n\nI will arrange an immediate replacement to be sent to your address at no additional cost. A prepaid return label for the incorrect item will be emailed to you within 24 hours. You do not need to pay for anything.\n\nAgain, I am truly sorry for this experience.",
+  billing: "Dear valued customer,\n\nI sincerely apologize for the duplicate charge on your order #ORD-6612. I have reviewed your account and confirmed the billing error. I completely understand your frustration — this should not have happened.\n\nA full refund for the extra charge will be processed back to your original payment method within 3–5 business days. This case has also been flagged for priority review. Thank you for bringing this to our attention.",
+  missing: "Dear valued customer,\n\nI am truly sorry to hear about your missing laptop order #ORD-9921. I completely understand how distressing and unacceptable this situation is, and I sincerely apologize for the frustration this has caused.\n\nThis case has been immediately escalated to our senior logistics team with highest priority. A full carrier investigation has been initiated. We will provide a complete resolution — either a replacement or full refund — within 48 hours. A senior team member will contact you directly.\n\nWe are committed to making this right.",
+  fraud: "Dear valued customer,\n\nWe take your report of unauthorized account activity extremely seriously, and we sincerely apologize for the distress this has caused you.\n\nYour account has been immediately secured and flagged. Our fraud investigation team is investigating all unauthorized transactions and will initiate a full refund for any charges you did not authorize. This case has been escalated with the highest priority — you will receive a direct update within 4 hours.\n\nYour security is our absolute top priority."
+};
+
+const LESSONS = {
+  refund: "For refund requests, always confirm eligibility status and provide a specific timeline — customers need certainty about when money returns to their account.",
+  tracking: "For tracking inquiries, proactively set expectations with a specific timeframe. Vague responses increase frustration meter significantly.",
+  wrong_item: "For wrong/damaged item cases, lead empathy first, then immediately offer both replacement and prepaid return — removing all friction prevents escalation.",
+  billing: "For billing errors, always explicitly confirm the duplicate charge was found. Customers need validation before they trust the resolution.",
+  missing: "For high-value missing items, trigger escalation immediately and commit to a concrete SLA. Vague timelines on high-value cases risk legal escalation.",
+  fraud: "For fraud cases, always address account security first before refund — customers need to know they're safe. Security + refund + timeline = maximum trust."
+};
+
+const AGENTS = ['triage','research','resolver','qa','escalation','critic'];
+let currentDiff = 'easy';
+let episodes = [];
+let lessonsList = [];
+let running = false;
+
+function setDiff(d, btn) {
+  currentDiff = d;
+  document.querySelectorAll('.diff-btn').forEach(b => { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function setBadge(agent, state, text) {
+  const el = document.getElementById('ab-' + agent);
+  el.className = 'agent-badge' + (state ? ' ' + state : '');
+  el.textContent = text;
+}
+
+function setBar(name, value, max) {
+  const pct = Math.min((value / max) * 100, 100);
+  document.getElementById('rb-' + name).style.width = pct.toFixed(1) + '%';
+  const el = document.getElementById('rv-' + name);
+  if (el) el.textContent = (value >= 0 ? '+' : '') + value.toFixed(2);
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function resetAll() {
+  AGENTS.forEach(a => setBadge(a, '', 'waiting'));
+  ['research','tag','draft','submit','total','frustration'].forEach(n => {
+    document.getElementById('rb-' + n).style.width = '0%';
+    const rv = document.getElementById('rv-' + n);
+    if (rv) rv.textContent = n === 'frustration' ? '0' : '+0.00';
+  });
+  document.getElementById('rv-total').textContent = '0.00';
+  document.getElementById('esc-flag').style.display = 'none';
+  document.getElementById('ticket-tags').innerHTML = '';
+  document.getElementById('pipe-step').textContent = 'idle';
+}
+
+function typeText(el, text, speed = 8) {
+  return new Promise(resolve => {
+    el.textContent = '';
+    el.classList.add('typing-cursor');
+    let i = 0;
+    const iv = setInterval(() => {
+      el.textContent += text[i];
+      i++;
+      if (i >= text.length) {
+        clearInterval(iv);
+        el.classList.remove('typing-cursor');
+        resolve();
+      }
+    }, speed);
+  });
+}
+
+async function runEpisode() {
+  if (running) return;
+  running = true;
+  document.getElementById('run-btn').disabled = true;
+  document.getElementById('status-dot').className = 'status-dot running';
+  document.getElementById('status-text').textContent = 'RUNNING';
+  document.getElementById('reply-body').textContent = '';
+  resetAll();
+
+  const pool = TASKS[currentDiff];
+  const task = pool[Math.floor(Math.random() * pool.length)];
+
+  // Show email
+  document.getElementById('email-body').textContent = task.email;
+
+  // Ticket tags
+  const tagsEl = document.getElementById('ticket-tags');
+  const diffColor = currentDiff === 'easy' ? 'var(--green)' : currentDiff === 'medium' ? 'var(--amber)' : 'var(--red)';
+  tagsEl.innerHTML = `
+    <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid ${diffColor};color:${diffColor}">${currentDiff.toUpperCase()}</span>
+    <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--border2);color:var(--muted)">${task.type}</span>
+    ${task.escalate ? '<span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--red);color:var(--red);background:var(--red-dim)">ESCALATE</span>' : ''}
+  `;
+
+  // Calculate reward with variance
+  const base = currentDiff === 'easy' ? 0.76 : currentDiff === 'medium' ? 0.65 : 0.55;
+  const boost = Math.min(lessonsList.length * 0.03, 0.2);
+  const noise = (Math.random() - 0.35) * 0.18;
+  const submitR = parseFloat(Math.min(Math.max(base + boost + noise, 0.3), 1.0).toFixed(2));
+  const totalR = parseFloat(Math.min(0.1 + 0.1 + 0.15 + submitR, 1.0).toFixed(2));
+  const frustration = submitR < 0.4 ? Math.floor(Math.random() * 30) + 10 : 0;
+
+  // Step 1: RESEARCH env
+  document.getElementById('pipe-step').textContent = 'RESEARCH';
+  setBadge('triage', 'active', 'running...');
+  await sleep(500);
+  setBar('research', 0.1, 1.0);
+
+  // Step 2: TRIAGE AGENT
+  setBadge('triage', 'done', task.type + ' / ' + (task.escalate ? 'high' : 'medium'));
+  setBadge('research', 'active', 'looking up...');
+  document.getElementById('pipe-step').textContent = 'TRIAGE';
+  await sleep(700);
+
+  // Step 3: TAG
+  setBar('tag', 0.1, 1.0);
+  setBadge('research', 'done', task.order ? task.order : 'no order');
+  setBadge('resolver', 'active', 'drafting...');
+  document.getElementById('pipe-step').textContent = 'DRAFT';
+  await sleep(900);
+
+  // Step 4: DRAFT + QA
+  setBar('draft', 0.15, 1.0);
+  setBadge('resolver', 'done', 'draft ready');
+  const qaFail = Math.random() < 0.3;
+  setBadge('qa', qaFail ? 'warn' : 'active', qaFail ? 'flagged issues' : 'checking...');
+  document.getElementById('pipe-step').textContent = 'QA';
+  await sleep(700);
+  if (qaFail) {
+    await sleep(500);
+    setBadge('qa', 'done', 'approved retry 2');
+  } else {
+    setBadge('qa', 'done', 'approved');
+  }
+
+  // Step 5: ESCALATION
+  if (task.escalate) {
+    document.getElementById('esc-flag').style.display = 'flex';
+    setBadge('escalation', 'active', 'escalating...');
+    document.getElementById('pipe-step').textContent = 'ESCALATE';
+    await sleep(800);
+    setBadge('escalation', 'done', 'report sent');
+  } else {
+    setBadge('escalation', 'skip', 'skipped');
+  }
+
+  // SUBMIT reward
+  document.getElementById('pipe-step').textContent = 'SUBMIT';
+  setBar('submit', submitR, 1.0);
+  setBar('total', totalR, 1.0);
+  document.getElementById('rv-total').textContent = '+' + totalR.toFixed(2);
+  document.getElementById('rv-total').style.color = totalR >= 0.7 ? 'var(--green)' : totalR >= 0.5 ? 'var(--amber)' : 'var(--red)';
+
+  if (frustration > 0) {
+    setBar('frustration', frustration, 100);
+    document.getElementById('rv-frustration').textContent = frustration;
+  }
+
+  // Type reply
+  await typeText(document.getElementById('reply-body'), REPLIES[task.type], 6);
+
+  // Critic
+  await sleep(400);
+  setBadge('critic', 'active', 'analyzing...');
+  document.getElementById('pipe-step').textContent = 'CRITIC';
+  await sleep(900);
+  setBadge('critic', 'done', 'lesson written');
+  document.getElementById('pipe-step').textContent = 'done';
+
+  // Update state
+  episodes.push({ reward: totalR, diff: currentDiff });
+  lessonsList.unshift({ ep: episodes.length, lesson: LESSONS[task.type], diff: currentDiff, reward: totalR });
+  if (lessonsList.length > 6) lessonsList.pop();
+
+  updateMetrics();
+  updateCurve();
+  updateLessons();
+
+  document.getElementById('status-dot').className = 'status-dot';
+  document.getElementById('status-text').textContent = 'READY';
+  document.getElementById('run-btn').disabled = false;
+  running = false;
+}
+
+function updateMetrics() {
+  const r = episodes.map(e => e.reward);
+  const avg = r.reduce((a,b) => a+b, 0) / r.length;
+  document.getElementById('m-ep').textContent = episodes.length;
+  document.getElementById('m-avg').textContent = avg.toFixed(3);
+  document.getElementById('m-best').textContent = Math.max(...r).toFixed(3);
+  document.getElementById('m-lessons').textContent = lessonsList.length;
+}
+
+function updateCurve() {
+  const area = document.getElementById('curve-area');
+  if (!episodes.length) { area.innerHTML = '<div class="empty-state" style="width:100%">no episodes yet</div>'; return; }
+  const maxR = Math.max(...episodes.map(e => e.reward), 0.01);
+  area.innerHTML = '';
+  const show = episodes.slice(-16);
+  show.forEach(ep => {
+    const h = Math.max((ep.reward / maxR) * 90, 4);
+    const color = ep.diff === 'easy' ? 'var(--green)' : ep.diff === 'medium' ? 'var(--amber)' : 'var(--red)';
+    const bar = document.createElement('div');
+    bar.className = 'curve-bar fadein';
+    bar.style.height = h + 'px';
+    bar.style.background = color;
+    bar.style.opacity = '0.85';
+    bar.setAttribute('data-val', ep.reward.toFixed(3));
+    area.appendChild(bar);
+  });
+
+  // Trend
+  const trendEl = document.getElementById('trend-label');
+  if (episodes.length >= 4) {
+    const first = episodes.slice(0, Math.ceil(episodes.length/2)).map(e=>e.reward);
+    const last = episodes.slice(-Math.ceil(episodes.length/2)).map(e=>e.reward);
+    const avgFirst = first.reduce((a,b)=>a+b,0)/first.length;
+    const avgLast = last.reduce((a,b)=>a+b,0)/last.length;
+    const diff = avgLast - avgFirst;
+    if (diff > 0.03) { trendEl.className='trend up'; trendEl.textContent=`↑ Improving +${diff.toFixed(3)} (lessons working)`; }
+    else if (diff < -0.03) { trendEl.className='trend down'; trendEl.textContent=`↓ Declining ${diff.toFixed(3)}`; }
+    else { trendEl.className='trend flat'; trendEl.textContent=`→ Stable (${diff >= 0 ? '+' : ''}${diff.toFixed(3)})`; }
+  } else {
+    trendEl.textContent = '';
+  }
+}
+
+function updateLessons() {
+  const wrap = document.getElementById('lessons-wrap');
+  document.getElementById('lesson-count').textContent = lessonsList.length + ' stored';
+  if (!lessonsList.length) { wrap.innerHTML = '<div class="empty-state">run an episode to generate lessons</div>'; return; }
+  const diffColor = d => d==='easy' ? 'var(--green)' : d==='medium' ? 'var(--amber)' : 'var(--red)';
+  wrap.innerHTML = lessonsList.map(l => `
+    <div class="lesson-item fadein">
+      <div class="lesson-meta">
+        <span class="lesson-ep-tag">EP ${l.ep}</span>
+        <span class="lesson-diff-tag" style="border:1px solid ${diffColor(l.diff)};color:${diffColor(l.diff)};background:${l.diff==='easy'?'var(--green-dim)':l.diff==='medium'?'var(--amber-dim)':'var(--red-dim)'}">${l.diff}</span>
+        <span class="lesson-score">score ${l.reward.toFixed ? l.reward.toFixed(3) : l.reward}</span>
+      </div>
+      <div class="lesson-text">${l.lesson}</div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>
