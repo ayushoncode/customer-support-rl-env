@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from app.env import SupportEnv, TASKS
@@ -11,17 +13,32 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 env = SupportEnv()
+
+@app.get("/dashboard")
+def dashboard():
+    return FileResponse("dashboard.html")
 
 @app.get("/")
 def root():
-    return {"message": "Customer Support RL Environment is Running", "health": "/health", "docs": "/docs", "tasks": "/tasks"}
-
+    return {
+        "message": "Customer Support RL Environment is Running",
+        "health": "/health",
+        "docs": "/docs",
+        "tasks": "/tasks",
+        "dashboard": "/dashboard",
+    }
 
 @app.get("/health")
 def health():
     return {"status": "ok", "env": "CustomerSupportEnv", "version": "1.0.0"}
-
 
 @app.post("/reset")
 def reset(request: ResetRequest = None):
@@ -31,34 +48,33 @@ def reset(request: ResetRequest = None):
     obs = env.reset(difficulty=difficulty)
     return obs.model_dump()
 
-
 @app.post("/step")
 def step(request: StepRequest):
     if not env.current_task:
         raise HTTPException(status_code=400, detail="Environment not initialized. Call /reset first.")
-    action = SupportAction(reply=request.action.reply)
-    state, reward, done, info = env.step(action)
+    state, reward, done, info = env.step(request.action)
     return {
-        "observation": state.model_dump(),
+        "state": state.model_dump(),
         "reward": reward,
         "done": done,
         "info": info,
     }
 
-
 @app.get("/state")
 def state():
     return env.state().model_dump()
-
 
 @app.get("/tasks")
 def list_tasks():
     all_tasks = []
     for difficulty, task_list in TASKS.items():
         for task in task_list:
-            all_tasks.append({"id": task["id"], "difficulty": difficulty, "email": task["email"]})
+            all_tasks.append({
+                "id": task["id"],
+                "difficulty": difficulty,
+                "email": task["email"],
+            })
     return {"tasks": all_tasks, "total": len(all_tasks)}
-
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=7860, reload=False)
