@@ -1,5 +1,4 @@
 import random
-from typing import Tuple, Dict, Any
 from app.models import SupportObservation, SupportAction, SupportState
 from app.database import lookup_order, check_refund_eligible, POLICY
 from app.policy import check_hallucination, check_escalation_needed, check_policy_violation
@@ -19,6 +18,9 @@ TASKS = {
     ],
 }
 
+# Difficulty multipliers — hard tasks are genuinely harder to score on
+DIFFICULTY_MULTIPLIER = {"easy": 1.0, "medium": 0.88, "hard": 0.75}
+
 class SupportEnv:
     def __init__(self):
         self.current_task = {}
@@ -28,6 +30,8 @@ class SupportEnv:
         self.researched = False
         self.tagged = False
         self.drafted = False
+        self.qa_retries = 0        # NEW: track QA retries
+        self.episode_num = 0       # NEW: track episode for learning signal
         self._observation = None
 
     def reset(self, difficulty="easy"):
@@ -37,6 +41,8 @@ class SupportEnv:
         self.researched = False
         self.tagged = False
         self.drafted = False
+        self.qa_retries = 0
+        self.episode_num += 1
         task_pool = TASKS.get(difficulty, TASKS["easy"])
         self.current_task = random.choice(task_pool)
         order_info = None
@@ -88,33 +94,87 @@ class SupportEnv:
                 done = True
             else:
                 reply = (action.reply or "").lower()
+
+                # ── Empathy score ──────────────────────────────────────
                 empathy_words = self.current_task["keywords"]["empathy"]
                 empathy_hits = sum(1 for w in empathy_words if w in reply)
                 empathy_score = min(empathy_hits / max(len(empathy_words) * 0.4, 1), 1.0) * 0.3
                 reward += empathy_score
+
+                # ── Solution score ─────────────────────────────────────
                 solution_words = self.current_task["keywords"]["solution"]
                 solution_hits = sum(1 for w in solution_words if w in reply)
                 solution_score = min(solution_hits / max(len(solution_words) * 0.4, 1), 1.0) * 0.4
                 reward += solution_score
+
+                # ── Completeness ───────────────────────────────────────
                 word_count = len(reply.split())
                 completeness_score = 0.2 if word_count >= 40 else (0.1 if word_count >= 20 else 0.0)
                 reward += completeness_score
+
+                # ── Personalisation ────────────────────────────────────
                 pers = 0.0
                 if any(w in reply for w in ["order", "account", "case", "ticket"]):
                     pers += 0.05
                 if any(w in reply for w in ["you", "your", "customer"]):
                     pers += 0.05
                 reward += pers
+
+                # ── Penalties ──────────────────────────────────────────
                 hallucination_penalty = check_hallucination(reply)
                 reward -= hallucination_penalty
+
                 policy_penalty = check_policy_violation(reply, self.current_task.get("order_id"))
                 reward -= policy_penalty
+
+                # NEW: QA retry penalty — each retry costs 0.05
+                if self.qa_retries > 0:
+                    retry_penalty = self.qa_retries * 0.05
+                    reward -= retry_penalty
+                    feedback_parts.append(f"QA retry penalty: -{retry_penalty:.2f} ({self.qa_retries} retries)")
+
+                frustration_delta = 4
+
+                # NEW: difficulty multiplier — hard tasks score lower
+                diff_mult = DIFFICULTY_MULTIPLIER.get(self.difficulty, 1.0)
+                if diff_mult < 1.0:
+                    reward = reward * diff_mult
+                    feedback_parts.append(f"Difficulty modifier: x{diff_mult}")
+
+                # ── Frustration ────────────────────────────────────────
                 if solution_score < 0.2:
-                    self.frustration_meter += 20
+                    frustration_delta += 24
+                elif solution_score >= 0.3:
+                    frustration_delta -= 6
+                if empathy_score < 0.12:
+                    frustration_delta += 15
+                elif empathy_score >= 0.22:
+                    frustration_delta -= 5
+                if completeness_score == 0.0:
+                    frustration_delta += 12
+                elif completeness_score >= 0.2:
+                    frustration_delta -= 4
+                if hallucination_penalty > 0:
+                    frustration_delta += 18
+                if policy_penalty > 0:
+                    frustration_delta += 20
+                if reward >= 0.75:
+                    frustration_delta -= 18
+                elif reward >= 0.55:
+                    frustration_delta -= 10
+                elif reward < 0.3:
+                    frustration_delta += 14
+
+                self.frustration_meter = max(0.0, min(100.0, self.frustration_meter + frustration_delta))
+                feedback_parts.append(f"Frustration shift: {frustration_delta:+.0f}")
                 if self.frustration_meter >= 100:
                     reward = -1.0
                     feedback_parts.append("CUSTOMER CHURNED")
-                feedback_parts.append(f"Empathy: {empathy_score:.2f} | Solution: {solution_score:.2f} | Complete: {completeness_score:.2f}")
+
+                feedback_parts.append(
+                    f"Empathy: {empathy_score:.2f} | Solution: {solution_score:.2f} | "
+                    f"Complete: {completeness_score:.2f} | Retries: {self.qa_retries}"
+                )
                 done = True
 
         reward = round(min(max(reward, -1.0), 1.0), 2)

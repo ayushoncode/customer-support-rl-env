@@ -71,6 +71,10 @@ body::before {
 .metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); margin-bottom: 8px; }
 .metric-value { font-size: 28px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.02em; transition: color 0.3s; }
 .metric-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
+.metric-trend { margin-top: 10px; font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.metric-trend.up { color: var(--green); }
+.metric-trend.down { color: var(--red); }
+.metric-trend.flat { color: var(--muted); }
 
 .controls { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
 .controls-label { font-size: 11px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 4px; }
@@ -90,6 +94,9 @@ body::before {
 
 .agent-item { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
 .agent-item:last-child { border-bottom: none; }
+.agent-item.active-row { background: linear-gradient(90deg, rgba(255,184,48,0.12), transparent); box-shadow: inset 2px 0 0 var(--amber); animation: agentSweep 1s ease infinite alternate; }
+.agent-item.done-row { background: linear-gradient(90deg, rgba(0,229,160,0.08), transparent); }
+.agent-item.warn-row { background: linear-gradient(90deg, rgba(255,92,92,0.09), transparent); }
 .agent-num { font-family: var(--mono); font-size: 10px; color: var(--dim); text-align: center; }
 .agent-info { display: flex; flex-direction: column; gap: 2px; }
 .agent-name { font-size: 13px; font-weight: 500; }
@@ -99,6 +106,7 @@ body::before {
 .agent-badge.done { border-color: var(--green); color: var(--green); background: var(--green-dim); }
 .agent-badge.skip { border-color: var(--dim); color: var(--dim); }
 .agent-badge.warn { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+@keyframes agentSweep { from { box-shadow: inset 2px 0 0 var(--amber), 0 0 0 rgba(255,184,48,0); } to { box-shadow: inset 2px 0 0 var(--amber), 0 0 18px rgba(255,184,48,0.08); } }
 
 .rbar-row { margin-bottom: 12px; }
 .rbar-row:last-child { margin-bottom: 0; }
@@ -119,9 +127,24 @@ body::before {
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
 
 .bottom-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; }
-.curve-area { display: flex; align-items: flex-end; gap: 5px; height: 100px; padding: 0 4px; }
-.curve-bar { flex: 1; border-radius: 3px 3px 0 0; transition: height 0.5s cubic-bezier(0.4,0,0.2,1); position: relative; min-height: 4px; cursor: default; }
-.curve-bar:hover::after { content: attr(data-val); position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-family: var(--mono); font-size: 10px; padding: 3px 7px; border-radius: 4px; white-space: nowrap; z-index: 10; }
+.curve-shell { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: stretch; }
+.curve-axis { display: flex; flex-direction: column; justify-content: space-between; height: 124px; font-family: var(--mono); font-size: 10px; color: var(--dim); padding-top: 2px; }
+.curve-axis span { line-height: 1; }
+.curve-stage { display: flex; flex-direction: column; gap: 8px; }
+.curve-grid { position: relative; height: 124px; border: 1px solid var(--border); border-radius: 10px; background:
+  linear-gradient(to top, rgba(255,255,255,0.03) 1px, transparent 1px) 0 0 / 100% 31px,
+  linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px) 0 0 / 28px 100%,
+  linear-gradient(180deg, rgba(77,159,255,0.08), rgba(77,159,255,0.02));
+  overflow: visible;
+}
+.curve-grid::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(255,255,255,0.08); }
+.curve-area { position: absolute; inset: 10px 8px 18px; display: flex; align-items: flex-end; justify-content: flex-start; gap: 5px; overflow: visible; }
+.curve-bar { flex: 1 1 0; max-width: 40px; border-radius: 4px 4px 0 0; transition: height 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.2s ease, opacity 0.2s ease; position: relative; min-height: 6px; cursor: default; }
+.curve-bar:hover { transform: translateY(-2px); opacity: 1; }
+.curve-bar:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-family: var(--mono); font-size: 10px; padding: 5px 8px; border-radius: 4px; white-space: nowrap; z-index: 20; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.curve-bar:hover::before { content: ''; position: absolute; left: 50%; bottom: calc(100% + 3px); width: 8px; height: 8px; background: var(--surface2); border-left: 1px solid var(--border2); border-top: 1px solid var(--border2); transform: translateX(-50%) rotate(45deg); z-index: 19; }
+.curve-x-axis { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--dim); padding: 0 4px; }
+.curve-caption { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
 .curve-legend { display: flex; gap: 12px; margin-top: 10px; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
 .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
@@ -130,12 +153,16 @@ body::before {
 .trend.down { color: var(--red); }
 .trend.flat { color: var(--muted); }
 
-.lesson-item { padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+.lesson-item { padding: 12px; background: linear-gradient(180deg, rgba(176,106,255,0.08), rgba(24,24,31,0.85)); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
 .lesson-item:last-child { margin-bottom: 0; }
 .lesson-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
 .lesson-ep-tag { font-family: var(--mono); font-size: 10px; color: var(--purple); background: var(--purple-dim); border: 1px solid var(--purple); padding: 1px 7px; border-radius: 3px; }
 .lesson-score { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.lesson-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.lesson-icon { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; background: rgba(255,255,255,0.05); }
+.lesson-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+.lesson-text strong { color: var(--green); font-weight: 600; }
+.lesson-context { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.lesson-summary { color: var(--muted); }
 .empty-state { font-size: 13px; color: var(--dim); text-align: center; padding: 20px 0; font-family: var(--mono); }
 
 .esc-flag { display: none; align-items: center; gap: 5px; font-size: 11px; font-family: var(--mono); color: var(--red); background: var(--red-dim); border: 1px solid var(--red); padding: 6px 12px; border-radius: 6px; margin-bottom: 10px; }
@@ -172,27 +199,31 @@ body::before {
   <div class="error-banner" id="error-banner"></div>
 
   <div class="metrics">
-    <div class="metric">
-      <div class="metric-label">Episodes</div>
-      <div class="metric-value" id="m-ep" style="color:var(--blue)">0</div>
-      <div class="metric-sub">total run</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Avg reward</div>
-      <div class="metric-value" id="m-avg">—</div>
-      <div class="metric-sub">all episodes</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Lessons</div>
-      <div class="metric-value" id="m-lessons" style="color:var(--purple)">0</div>
-      <div class="metric-sub">in memory</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Best score</div>
-      <div class="metric-value" id="m-best" style="color:var(--green)">—</div>
-      <div class="metric-sub">single episode</div>
-    </div>
-  </div>
+	    <div class="metric">
+	      <div class="metric-label">Episodes</div>
+	      <div class="metric-value" id="m-ep" style="color:var(--blue)">0</div>
+	      <div class="metric-sub">total run</div>
+	      <div class="metric-trend flat" id="m-ep-trend">no activity yet</div>
+	    </div>
+	    <div class="metric">
+	      <div class="metric-label">Avg reward</div>
+	      <div class="metric-value" id="m-avg">—</div>
+	      <div class="metric-sub">all episodes</div>
+	      <div class="metric-trend flat" id="m-avg-trend">waiting for signal</div>
+	    </div>
+	    <div class="metric">
+	      <div class="metric-label">Lessons</div>
+	      <div class="metric-value" id="m-lessons" style="color:var(--purple)">0</div>
+	      <div class="metric-sub">in memory</div>
+	      <div class="metric-trend flat" id="m-lessons-trend">critic idle</div>
+	    </div>
+	    <div class="metric">
+	      <div class="metric-label">Best score</div>
+	      <div class="metric-value" id="m-best" style="color:var(--green)">—</div>
+	      <div class="metric-sub">single episode</div>
+	      <div class="metric-trend flat" id="m-best-trend">no peak yet</div>
+	    </div>
+	  </div>
 
   <div class="controls">
     <span class="controls-label">Difficulty:</span>
@@ -291,13 +322,31 @@ body::before {
   </div>
 
   <div class="bottom-grid">
-    <div class="card">
-      <div class="card-head">Reward Curve — Self-Improvement</div>
-      <div class="curve-area" id="curve-area">
-        <div class="empty-state" style="width:100%">no episodes yet</div>
-      </div>
-      <div class="curve-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Easy</div>
+	    <div class="card">
+	      <div class="card-head">Reward Curve — Self-Improvement</div>
+	      <div class="curve-caption">Episode vs Reward</div>
+	      <div class="curve-shell" style="margin-top:10px;">
+	        <div class="curve-axis">
+	          <span>1.0</span>
+	          <span>0.75</span>
+	          <span>0.50</span>
+	          <span>0.25</span>
+	          <span>0.00</span>
+	        </div>
+	        <div class="curve-stage">
+	          <div class="curve-grid">
+	            <div class="curve-area" id="curve-area">
+	              <div class="empty-state" style="width:100%">no episodes yet</div>
+	            </div>
+	          </div>
+	          <div class="curve-x-axis">
+	            <span>ep 1</span>
+	            <span>latest</span>
+	          </div>
+	        </div>
+	      </div>
+	      <div class="curve-legend">
+	        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Easy</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Medium</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Hard</div>
       </div>
@@ -322,16 +371,7 @@ let episodes = [];
 let lessonsList = [];
 let running = false;
 let totalRewardAccum = 0;
-
-const LESSONS_MAP = {
-  refund: "For refund requests, confirm eligibility and provide a specific timeline — certainty reduces frustration.",
-  tracking: "For tracking inquiries, set specific expectations with a timeframe — vague responses increase frustration.",
-  wrong_item: "For wrong/damaged items, lead with empathy then immediately offer replacement + return label.",
-  billing: "For billing errors, explicitly confirm the duplicate charge was found before offering resolution.",
-  missing: "For high-value missing items, always trigger escalation and commit to a concrete SLA.",
-  fraud: "For fraud cases, address account security first — customers need safety assurance before refund.",
-  general: "Always include empathy words, a clear solution, and reference the customer's specific order."
-};
+let lastMetricsSnapshot = null;
 
 function setDiff(d, btn) {
   currentDiff = d;
@@ -341,8 +381,15 @@ function setDiff(d, btn) {
 
 function setBadge(agent, state, text) {
   const el = document.getElementById('ab-' + agent);
+  const row = el.closest('.agent-item');
   el.className = 'agent-badge' + (state ? ' ' + state : '');
   el.textContent = text;
+  if (row) {
+    row.classList.remove('active-row', 'done-row', 'warn-row');
+    if (state === 'active') row.classList.add('active-row');
+    if (state === 'done' || state === 'skip') row.classList.add('done-row');
+    if (state === 'warn') row.classList.add('warn-row');
+  }
 }
 
 function setBar(name, value, max) {
@@ -377,6 +424,34 @@ function resetAll() {
   document.getElementById('feedback-chips').innerHTML = '';
 }
 
+function setMetricTrend(id, state, text) {
+  const el = document.getElementById(id);
+  el.className = 'metric-trend ' + state;
+  el.textContent = text;
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatLessonText(text) {
+  let html = escapeHtml(text);
+  html = html.replace(/(always|never|next time|critical|missed|must include|secure(?:d)?|timeline|escalate(?:d)?|refund|replacement|return label|investigate|account)/gi, '<strong>$1</strong>');
+  return html;
+}
+
+function lessonIcon(text) {
+  const lower = text.toLowerCase();
+  if (lower.includes('critical') || lower.includes('missed')) return '⚠';
+  if (lower.includes('always') || lower.includes('next time')) return '💡';
+  return '✅';
+}
+
 async function apiPost(path, body) {
   const res = await fetch(API + path, {
     method: 'POST',
@@ -407,20 +482,24 @@ async function runEpisode() {
   document.getElementById('reply-body').textContent = '';
   resetAll();
 
-  let obs, taskId, email, orderInfo;
-  let stepRewards = { research: 0, tag: 0, draft: 0, submit: 0 };
-  let totalReward = 0;
-  let submitFeedback = '';
-  let finalReply = '';
-
   try {
-    // ── RESET ──────────────────────────────────────────────
     setBadge('triage', 'active', 'connecting...');
-    const resetData = await apiPost('/reset', { difficulty: currentDiff });
-    obs = resetData;
-    taskId = obs.task_id || '';
-    email = obs.email || '';
-    orderInfo = obs.order_info || null;
+    const result = await apiPost('/run_episode', { difficulty: currentDiff });
+    const taskId = result.task_id || '';
+    const email = result.email || '';
+    const orderInfo = result.order_info || null;
+    const triage = result.triage_result || {};
+    const qa = result.qa_result || {};
+    const stepRewards = result.step_rewards || { research: 0, tag: 0, draft: 0, submit: 0 };
+    const submitReward = typeof result.submit_reward === 'number' ? result.submit_reward : 0;
+    const totalReward = typeof result.total_reward === 'number' ? result.total_reward : 0;
+    const submitFeedback = result.feedback || '';
+    const finalReply = result.final_reply || '';
+    const lesson = result.lesson || 'No lesson returned.';
+    const frustration = typeof result.frustration === 'number' ? result.frustration : 0;
+    const qaRetries = result.qa_retries || 0;
+    const isEscalation = !!result.escalation_used;
+    const ticketType = triage.ticket_type || 'tracking';
 
     document.getElementById('email-body').textContent = email;
 
@@ -428,111 +507,52 @@ async function runEpisode() {
     document.getElementById('ticket-tags').innerHTML = `
       <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid ${diffColor};color:${diffColor}">${currentDiff.toUpperCase()}</span>
       <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--border2);color:var(--muted)">${taskId}</span>
+      <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--blue);color:var(--blue);background:var(--blue-dim)">${ticketType}</span>
     `;
 
-    // ── STEP 1: RESEARCH ───────────────────────────────────
     setBadge('triage', 'active', 'classifying...');
-    const researchStep = await apiPost('/step', {
-      action: { action_type: 'RESEARCH', order_id: orderInfo ? orderInfo.order_id || null : null, reasoning: 'Gathering order and policy info' }
-    });
-    stepRewards.research = researchStep.reward || 0;
-    totalReward += stepRewards.research;
-    setBar('research', stepRewards.research, 1.0);
+    setBar('research', stepRewards.research || 0, 1.0);
     setBadge('triage', 'done', 'classified');
     setBadge('research', 'done', orderInfo ? 'order found' : 'no order');
     await sleep(400);
 
-    // ── STEP 2: TAG ────────────────────────────────────────
     setBadge('resolver', 'active', 'tagging...');
-    const ticketType = taskId.includes('refund') ? 'refund' :
-                       taskId.includes('fraud') ? 'fraud' :
-                       taskId.includes('billing') ? 'billing' :
-                       taskId.includes('missing') ? 'missing' :
-                       taskId.includes('wrong') ? 'wrong_item' : 'tracking';
-
-    const tagStep = await apiPost('/step', {
-      action: { action_type: 'TAG', tag: ticketType, reasoning: 'Classified ticket type from triage' }
-    });
-    stepRewards.tag = tagStep.reward || 0;
-    totalReward += stepRewards.tag;
-    setBar('tag', stepRewards.tag, 1.0);
+    setBar('tag', stepRewards.tag || 0, 1.0);
     setBadge('resolver', 'done', ticketType);
     await sleep(400);
 
-    // ── STEP 3: BUILD REPLY ────────────────────────────────
     setBadge('resolver', 'active', 'drafting...');
-    const isEscalation = ['hard_missing_laptop','hard_fraud'].includes(taskId) || email.toLowerCase().includes('lawyer') || email.toLowerCase().includes('fraud');
     if (isEscalation) document.getElementById('esc-flag').style.display = 'flex';
-
-    // Build a proper reply based on order info + ticket type
-    const customerName = orderInfo ? orderInfo.customer || 'valued customer' : 'valued customer';
-    const orderId = orderInfo ? orderInfo.order_id || '' : '';
-    const item = orderInfo ? orderInfo.item || '' : '';
-    const amount = orderInfo ? orderInfo.amount || '' : '';
-
-    const replyTemplates = {
-      refund: `Dear ${customerName},\n\nI sincerely apologize for the delay with your order${orderId ? ' #' + orderId : ''}${item ? ' for the ' + item : ''}. I completely understand how frustrating this must be.\n\nI have reviewed your account and confirmed your refund eligibility. A full refund${amount ? ' of $' + amount : ''} will be processed back to your original payment method within 3–5 business days. You will receive a confirmation email once initiated.\n\nThank you for your patience and continued trust in us.`,
-      tracking: `Dear ${customerName},\n\nI sincerely apologize for the lack of tracking updates on your recent order. I completely understand how important it is to know the status of your shipment.\n\nI have looked into your order and confirmed it has been dispatched from our facility. Your tracking information will be updated and emailed to you within 24 hours.\n\nThank you for your patience — please don't hesitate to reach out if you need anything else.`,
-      wrong_item: `Dear ${customerName},\n\nI sincerely apologize for receiving the wrong item${item ? ' instead of your ' + item : ''} — and that it arrived damaged. This is completely unacceptable and I am truly sorry for the frustration this has caused.\n\nI will arrange an immediate replacement to be sent to your address at no additional cost. A prepaid return label will be emailed to you within 24 hours.\n\nAgain, I deeply apologize for this experience.`,
-      billing: `Dear ${customerName},\n\nI sincerely apologize for the duplicate charge on your order${orderId ? ' #' + orderId : ''}. I have reviewed your account and confirmed the billing error. I completely understand your frustration.\n\nA full refund for the extra charge will be processed back to your original payment method within 3–5 business days. This case has also been flagged for priority review.\n\nThank you for bringing this to our attention.`,
-      missing: `Dear ${customerName},\n\nI am truly sorry to hear about your missing${item ? ' ' + item : ''} order${orderId ? ' #' + orderId : ''}. I completely understand how distressing and unacceptable this situation is.\n\nThis case has been immediately escalated to our senior logistics team with the highest priority. A full carrier investigation has been initiated. We will provide a complete resolution — either a replacement or full refund — within 48 hours. A senior team member will contact you directly.\n\nWe are fully committed to making this right.`,
-      fraud: `Dear ${customerName},\n\nWe take your report of unauthorized account activity extremely seriously, and we sincerely apologize for the distress this has caused you.\n\nYour account has been immediately secured and flagged. Our fraud investigation team is investigating all unauthorized transactions and will initiate a full refund for any charges you did not authorize. This case has been escalated with the highest priority — you will receive a direct update within 4 hours.\n\nYour account security is our absolute top priority.`
-    };
-
-    finalReply = replyTemplates[ticketType] || replyTemplates['tracking'];
     setBadge('resolver', 'done', 'draft ready');
     await sleep(300);
 
-    // ── STEP 4: QA CHECK (simulated — runs locally) ────────
     setBadge('qa', 'active', 'checking...');
     await sleep(600);
-    const replyLower = finalReply.toLowerCase();
-    const hasEmpathy = ['sorry','apologize','understand','sincer','frustrat'].some(w => replyLower.includes(w));
-    const hasSolution = ['refund','replac','escalat','investigat','resolv','credit','track','secur'].some(w => replyLower.includes(w));
-    const wordCount = finalReply.split(' ').length;
-    if (!hasEmpathy || !hasSolution || wordCount < 30) {
+    if (!qa.approved) {
       setBadge('qa', 'warn', 'issues found');
       await sleep(500);
     }
-    setBadge('qa', 'done', 'approved');
+    setBadge('qa', 'done', qa.approved ? 'approved' : `retry x${qaRetries}`);
 
-    // ── STEP 5: ESCALATION ─────────────────────────────────
     if (isEscalation) {
       setBadge('escalation', 'active', 'escalating...');
       await sleep(700);
       setBadge('escalation', 'done', 'report sent');
-      finalReply += '\n\nThis case has been escalated to our senior support team who will personally handle your situation with highest priority. You will receive a direct response within 4 hours.';
     } else {
       setBadge('escalation', 'skip', 'skipped');
     }
 
-    // ── STEP 6: DRAFT ──────────────────────────────────────
-    const draftStep = await apiPost('/step', {
-      action: { action_type: 'DRAFT', reasoning: 'QA approved — submitting draft' }
-    });
-    stepRewards.draft = draftStep.reward || 0;
-    totalReward += stepRewards.draft;
-    setBar('draft', stepRewards.draft, 1.0);
+    setBar('draft', stepRewards.draft || 0, 1.0);
     await sleep(300);
 
-    // ── STEP 7: SUBMIT ─────────────────────────────────────
-    const submitStep = await apiPost('/step', {
-      action: { action_type: 'SUBMIT', reply: finalReply, reasoning: 'Submitting QA-approved reply' }
-    });
-    stepRewards.submit = submitStep.reward || 0;
-    totalReward += stepRewards.submit;
-    submitFeedback = submitStep.state ? submitStep.state.feedback : (submitStep.feedback || '');
-    const frustration = submitStep.state ? (submitStep.state.frustration_meter || 0) : 0;
-
-    setBar('submit', stepRewards.submit, 1.0);
+    setBar('submit', stepRewards.submit || 0, 1.0);
     setBar('frustration', frustration, 100);
 
-    const clampedTotal = Math.min(Math.max(totalReward, -1.0), 1.0);
+    const clampedTotal = Math.min(Math.max(submitReward, -1.0), 1.0);
     setBar('total', clampedTotal, 1.0);
     document.getElementById('rv-total').textContent = (clampedTotal >= 0 ? '+' : '') + clampedTotal.toFixed(3);
     document.getElementById('rv-total').style.color = clampedTotal >= 0.7 ? 'var(--green)' : clampedTotal >= 0.5 ? 'var(--amber)' : 'var(--red)';
 
-    // Show feedback chips
     if (submitFeedback) {
       const chips = submitFeedback.split('|').map(s => s.trim()).filter(Boolean);
       document.getElementById('feedback-chips').innerHTML = chips.map(c =>
@@ -540,18 +560,14 @@ async function runEpisode() {
       ).join('');
     }
 
-    // Type reply
     await typeText(document.getElementById('reply-body'), finalReply, 4);
 
-    // ── STEP 8: CRITIC ─────────────────────────────────────
     setBadge('critic', 'active', 'analyzing...');
     await sleep(800);
     setBadge('critic', 'done', 'lesson written');
 
-    // Store episode + lesson
-    episodes.push({ reward: clampedTotal, diff: currentDiff });
-    const lesson = LESSONS_MAP[ticketType] || LESSONS_MAP['general'];
-    lessonsList.unshift({ ep: episodes.length, lesson, diff: currentDiff, reward: clampedTotal, taskId });
+    episodes.push({ reward: clampedTotal, diff: currentDiff, totalReward, frustration, taskId });
+    lessonsList.unshift({ ep: result.episode || episodes.length, lesson, diff: currentDiff, reward: clampedTotal, taskId });
     if (lessonsList.length > 6) lessonsList.pop();
 
     updateMetrics();
@@ -571,27 +587,52 @@ async function runEpisode() {
 }
 
 function updateMetrics() {
+  const prev = lastMetricsSnapshot;
   const r = episodes.map(e => e.reward);
   const avg = r.reduce((a,b) => a+b, 0) / r.length;
+  const best = Math.max(...r);
   document.getElementById('m-ep').textContent = episodes.length;
   document.getElementById('m-avg').textContent = avg.toFixed(3);
   document.getElementById('m-avg').style.color = avg >= 0.7 ? 'var(--green)' : avg >= 0.5 ? 'var(--amber)' : 'var(--red)';
-  document.getElementById('m-best').textContent = Math.max(...r).toFixed(3);
+  document.getElementById('m-best').textContent = best.toFixed(3);
   document.getElementById('m-lessons').textContent = lessonsList.length;
+
+  if (!prev) {
+    setMetricTrend('m-ep-trend', 'up', '+1 just ran');
+    setMetricTrend('m-avg-trend', 'flat', 'baseline forming');
+    setMetricTrend('m-lessons-trend', 'up', '+1 synced');
+    setMetricTrend('m-best-trend', 'up', 'first peak captured');
+  } else {
+    setMetricTrend('m-ep-trend', 'up', `+${episodes.length - prev.episodes} this run`);
+
+    const avgDelta = avg - prev.avg;
+    if (avgDelta > 0.01) setMetricTrend('m-avg-trend', 'up', `up ${avgDelta.toFixed(3)} vs prev`);
+    else if (avgDelta < -0.01) setMetricTrend('m-avg-trend', 'down', `down ${Math.abs(avgDelta).toFixed(3)} vs prev`);
+    else setMetricTrend('m-avg-trend', 'flat', `flat ${avgDelta >= 0 ? '+' : ''}${avgDelta.toFixed(3)}`);
+
+    const lessonDelta = lessonsList.length - prev.lessons;
+    if (lessonDelta > 0) setMetricTrend('m-lessons-trend', 'up', `+${lessonDelta} new memory`);
+    else setMetricTrend('m-lessons-trend', 'flat', 'memory unchanged');
+
+    const bestDelta = best - prev.best;
+    if (bestDelta > 0.001) setMetricTrend('m-best-trend', 'up', `new peak +${bestDelta.toFixed(3)}`);
+    else setMetricTrend('m-best-trend', 'flat', 'peak holding');
+  }
+
+  lastMetricsSnapshot = { episodes: episodes.length, avg, lessons: lessonsList.length, best };
 }
 
 function updateCurve() {
   const area = document.getElementById('curve-area');
   if (!episodes.length) { area.innerHTML = '<div class="empty-state" style="width:100%">no episodes yet</div>'; return; }
-  const maxR = Math.max(...episodes.map(e => e.reward), 0.01);
   area.innerHTML = '';
-  episodes.slice(-16).forEach(ep => {
-    const h = Math.max((ep.reward / maxR) * 90, 4);
+  episodes.slice(-16).forEach((ep, idx, slice) => {
+    const h = Math.max(ep.reward * 100, 6);
     const color = ep.diff === 'easy' ? 'var(--green)' : ep.diff === 'medium' ? 'var(--amber)' : 'var(--red)';
     const bar = document.createElement('div');
     bar.className = 'curve-bar fadein';
     bar.style.cssText = `height:${h}px;background:${color};opacity:0.85`;
-    bar.setAttribute('data-val', ep.reward.toFixed(3));
+    bar.setAttribute('data-tip', `ep ${episodes.length - slice.length + idx + 1} | ${ep.diff} | reward ${ep.reward.toFixed(3)} | frustration ${Math.round(ep.frustration)}`);
     area.appendChild(bar);
   });
   const trendEl = document.getElementById('trend-label');
@@ -603,6 +644,9 @@ function updateCurve() {
     if (diff > 0.02) { trendEl.className='trend up'; trendEl.textContent=`↑ Improving +${diff.toFixed(3)} (lessons working)`; }
     else if (diff < -0.02) { trendEl.className='trend down'; trendEl.textContent=`↓ Declining ${diff.toFixed(3)}`; }
     else { trendEl.className='trend flat'; trendEl.textContent=`→ Stable (${diff >= 0 ? '+' : ''}${diff.toFixed(3)})`; }
+  } else {
+    trendEl.className = 'trend flat';
+    trendEl.textContent = '→ Need 4+ episodes for a trend read';
   }
 }
 
@@ -615,11 +659,13 @@ function updateLessons() {
   wrap.innerHTML = lessonsList.map(l => `
     <div class="lesson-item fadein">
       <div class="lesson-meta">
+        <span class="lesson-icon">${lessonIcon(l.lesson)}</span>
         <span class="lesson-ep-tag">EP ${l.ep}</span>
         <span style="font-family:var(--mono);font-size:10px;padding:1px 7px;border-radius:3px;border:1px solid ${diffColor(l.diff)};color:${diffColor(l.diff)};background:${diffBg(l.diff)}">${l.diff}</span>
         <span class="lesson-score">+${l.reward.toFixed(3)}</span>
       </div>
-      <div class="lesson-text">${l.lesson}</div>
+      <div class="lesson-context">${l.taskId.replaceAll('_', ' ')} | critic memory injection</div>
+      <div class="lesson-text">${formatLessonText(l.lesson)}</div>
     </div>
   `).join('');
 }

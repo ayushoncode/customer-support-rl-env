@@ -38,3 +38,6 @@ class ResetRequest(BaseModel):
 
 class StepRequest(BaseModel):
     action: SupportAction
+
+class RunEpisodeRequest(BaseModel):
+    difficulty: str = "easy"

@@ -49,16 +49,25 @@ def run_episode(
         log(f"[MEMORY] Injecting {len(memory.lessons)} lessons into agents")
 
     total_reward = 0.0
+    submit_reward = 0.0
+    step_rewards = {
+        "research": 0.0,
+        "tag": 0.0,
+        "draft": 0.0,
+        "submit": 0.0,
+    }
     episode_transcript = {
         "email": obs.email,
         "task_id": obs.task_id,
         "difficulty": difficulty,
+        "order_info": obs.order_info,
         "triage_result": {},
         "research_context": {},
         "qa_result": {},
         "final_reply": "",
         "env_feedback": "",
         "escalation_used": False,
+        "qa_retries": 0,
     }
 
     # ── STEP 1: RESEARCH (env action) ──────────────────────────────
@@ -70,6 +79,7 @@ def run_episode(
     )
     state, reward, done, info = env.step(research_action)
     total_reward += reward
+    step_rewards["research"] = reward
     log(f"  → Reward: {reward} | Feedback: {state.feedback}")
 
     # ── STEP 2: TRIAGE AGENT ───────────────────────────────────────
@@ -87,6 +97,7 @@ def run_episode(
     )
     state, reward, done, info = env.step(tag_action)
     total_reward += reward
+    step_rewards["tag"] = reward
     log(f"  → Reward: {reward} | Feedback: {state.feedback}")
 
     # ── STEP 4: RESEARCH AGENT ─────────────────────────────────────
@@ -135,6 +146,8 @@ def run_episode(
             break
         else:
             log(f"  → QA REJECTED — resolver will retry with issues in context")
+            env.qa_retries += 1
+            episode_transcript["qa_retries"] = env.qa_retries
             # Inject QA issues into lessons for next resolver attempt
             qa_feedback = "QA FEEDBACK: " + " | ".join(qa_result["issues"])
             lessons_prompt_with_qa = lessons_prompt + f"\n{qa_feedback}\n"
@@ -145,6 +158,7 @@ def run_episode(
         log("  → Using last draft despite QA rejection")
 
     episode_transcript["qa_result"] = qa_result
+    episode_transcript["qa_retries"] = env.qa_retries
 
     # ── STEP 6: ESCALATION AGENT (conditional) ────────────────────
     needs_escalation = (
@@ -177,6 +191,7 @@ def run_episode(
     )
     state, reward, done, info = env.step(draft_action)
     total_reward += reward
+    step_rewards["draft"] = reward
     log(f"  → Reward: {reward} | Feedback: {state.feedback}")
 
     # ── STEP 8: SUBMIT (env action) ────────────────────────────────
@@ -189,6 +204,8 @@ def run_episode(
     )
     state, reward, done, info = env.step(submit_action)
     total_reward += reward
+    submit_reward = reward
+    step_rewards["submit"] = reward
     episode_transcript["final_reply"] = final_draft
     episode_transcript["env_feedback"] = state.feedback
     log(f"  → Submit reward: {reward}")
@@ -202,7 +219,7 @@ def run_episode(
     log("\n[STEP 9] CRITIC AGENT")
     critic_output = critic_agent.run(
         episode_transcript=episode_transcript,
-        final_reward=total_reward,
+        final_reward=submit_reward,
         episode_num=episode_num,
         difficulty=difficulty,
     )
@@ -210,7 +227,7 @@ def run_episode(
     log(f"  → Lesson: {lesson}")
 
     # Store in memory
-    memory.add_lesson(lesson, episode_num, total_reward, difficulty)
+    memory.add_lesson(lesson, episode_num, submit_reward, difficulty)
     memory.add_episode(episode_num, total_reward, difficulty, obs.task_id)
 
     return {
@@ -218,8 +235,11 @@ def run_episode(
         "difficulty": difficulty,
         "task_id": obs.task_id,
         "total_reward": total_reward,
+        "submit_reward": submit_reward,
+        "step_rewards": step_rewards,
         "lesson": lesson,
         "transcript": episode_transcript,
         "steps": state.steps_taken,
         "frustration": state.frustration_meter,
+        "feedback": state.feedback,
     }

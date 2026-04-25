@@ -5,7 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from app.env import SupportEnv, TASKS
-from app.models import ResetRequest, StepRequest, SupportAction
+from app.models import ResetRequest, StepRequest, SupportAction, RunEpisodeRequest
+from memory import AgentMemory
+from orchestrator import run_episode
 
 app = FastAPI(
     title="Customer Support RL Environment",
@@ -21,6 +23,7 @@ app.add_middleware(
 )
 
 env = SupportEnv()
+memory = AgentMemory(max_lessons=10)
 
 @app.get("/dashboard")
 def dashboard():
@@ -58,6 +61,41 @@ def step(request: StepRequest):
         "reward": reward,
         "done": done,
         "info": info,
+    }
+
+@app.post("/run_episode")
+def run_full_episode(request: RunEpisodeRequest = None):
+    difficulty = request.difficulty if request else "easy"
+    if difficulty not in TASKS:
+        raise HTTPException(status_code=400, detail=f"Invalid difficulty. Choose from: {list(TASKS.keys())}")
+
+    episode_num = len(memory.episode_history) + 1
+    result = run_episode(
+        difficulty=difficulty,
+        episode_num=episode_num,
+        memory=memory,
+        verbose=False,
+    )
+
+    transcript = result["transcript"]
+    return {
+        "episode": result["episode"],
+        "difficulty": result["difficulty"],
+        "task_id": result["task_id"],
+        "email": transcript.get("email", ""),
+        "order_info": transcript.get("order_info"),
+        "triage_result": transcript.get("triage_result", {}),
+        "qa_result": transcript.get("qa_result", {}),
+        "final_reply": transcript.get("final_reply", ""),
+        "lesson": result["lesson"],
+        "submit_reward": result["submit_reward"],
+        "total_reward": result["total_reward"],
+        "step_rewards": result["step_rewards"],
+        "feedback": result["feedback"],
+        "frustration": result["frustration"],
+        "qa_retries": transcript.get("qa_retries", 0),
+        "escalation_used": transcript.get("escalation_used", False),
+        "memory_size": len(memory.lessons),
     }
 
 @app.get("/state")
