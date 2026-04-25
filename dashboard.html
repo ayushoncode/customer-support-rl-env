@@ -509,7 +509,10 @@ body::before {
 </div>
 
 <script>
-const API = 'http://localhost:7860';
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:7860'
+  : window.location.origin;
+document.getElementById('backend-url-display').textContent = API;
 let currentDiff = 'easy';
 let episodes = [];
 let lessonsList = [];
