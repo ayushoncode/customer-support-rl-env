@@ -481,4 +481,3 @@ All agents fall back to rule-based templates when `HF_TOKEN` is not set — the 
 
 ---
 
-*Built for the 2026 OpenEnv x Meta PyTorch x Scaler Hackathon — Round 2*
