@@ -61,12 +61,16 @@ def run_episode(
         "task_id": obs.task_id,
         "difficulty": difficulty,
         "order_info": obs.order_info,
+        "resolver_source": "",
+        "resolver_error": "",
         "triage_result": {},
         "research_context": {},
         "qa_result": {},
         "final_reply": "",
         "env_feedback": "",
         "escalation_used": False,
+        "escalation_reason": "",
+        "escalation_action": "",
         "qa_retries": 0,
     }
 
@@ -126,6 +130,8 @@ def run_episode(
             lessons_prompt=lessons_prompt,
         )
         draft = resolver_output["draft"]
+        episode_transcript["resolver_source"] = resolver_output.get("source", "")
+        episode_transcript["resolver_error"] = resolver_output.get("llm_error", "")
 
         # QA check
         log(f"\n[STEP 5b] QA AGENT (attempt {attempt + 1})")
@@ -146,12 +152,13 @@ def run_episode(
             break
         else:
             log(f"  → QA REJECTED — resolver will retry with issues in context")
-            env.qa_retries += 1
-            episode_transcript["qa_retries"] = env.qa_retries
-            # Inject QA issues into lessons for next resolver attempt
-            qa_feedback = "QA FEEDBACK: " + " | ".join(qa_result["issues"])
-            lessons_prompt_with_qa = lessons_prompt + f"\n{qa_feedback}\n"
-            lessons_prompt = lessons_prompt_with_qa  # update for retry
+            if attempt < MAX_QA_RETRIES:
+                env.qa_retries += 1
+                episode_transcript["qa_retries"] = env.qa_retries
+                # Inject QA issues into lessons for next resolver attempt
+                qa_feedback = "QA FEEDBACK: " + " | ".join(qa_result["issues"])
+                lessons_prompt_with_qa = lessons_prompt + f"\n{qa_feedback}\n"
+                lessons_prompt = lessons_prompt_with_qa  # update for retry
 
     if not final_draft:
         final_draft = draft  # use last attempt even if rejected
@@ -177,6 +184,8 @@ def run_episode(
         )
         final_draft = escalation_output["enhanced_reply"]
         episode_transcript["escalation_used"] = True
+        episode_transcript["escalation_reason"] = escalation_output["reason"]
+        episode_transcript["escalation_action"] = escalation_output["action"]
         log(f"  → Reason: {escalation_output['reason']}")
         log(f"  → Action: {escalation_output['action']}")
         log(f"  → Escalation report generated")

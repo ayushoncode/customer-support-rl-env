@@ -13,8 +13,8 @@
   --border: rgba(255,255,255,0.07);
   --border2: rgba(255,255,255,0.13);
   --text: #f0f0f5;
-  --muted: #6b6b80;
-  --dim: #3a3a50;
+  --muted: #8b8ba2;
+  --dim: #5a5a73;
   --green: #00e5a0;
   --green-dim: rgba(0,229,160,0.12);
   --blue: #4d9fff;
@@ -33,9 +33,10 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 15px;
   min-height: 100vh;
   overflow-x: hidden;
+  line-height: 1.45;
 }
 body::before {
   content: '';
@@ -48,48 +49,56 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-.wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+.wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 2.5rem; }
 
-.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.25rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); gap: 16px; }
 .header-left { display: flex; flex-direction: column; gap: 4px; }
 .logo { font-family: var(--mono); font-size: 11px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
 .header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
 .header h1 span { color: var(--green); }
-.header-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.header-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
 .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .status-pill { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; border: 1px solid var(--border2); background: var(--surface); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
 .status-dot.running { background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 0.6s infinite; }
 .status-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); animation: none; }
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
-.backend-url { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.backend-url { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .backend-url span { color: var(--green); }
 
-.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
 .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color 0.2s; }
 .metric:hover { border-color: var(--border2); }
-.metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); margin-bottom: 8px; }
+.metric-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); margin-bottom: 8px; }
 .metric-value { font-size: 28px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.02em; transition: color 0.3s; }
-.metric-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
-.metric-trend { margin-top: 10px; font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.metric-sub { font-size: 12px; color: var(--dim); margin-top: 4px; }
+.metric-trend { margin-top: 10px; font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .metric-trend.up { color: var(--green); }
 .metric-trend.down { color: var(--red); }
 .metric-trend.flat { color: var(--muted); }
 
-.controls { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.controls { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .controls-label { font-size: 11px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 4px; }
 .diff-btn { padding: 7px 16px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--muted); font-family: var(--sans); font-size: 13px; cursor: pointer; transition: all 0.15s; }
 .diff-btn:hover { color: var(--text); background: var(--surface2); }
 .diff-btn.easy.active { border-color: var(--green); color: var(--green); background: var(--green-dim); }
 .diff-btn.medium.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
 .diff-btn.hard.active { border-color: var(--red); color: var(--red); background: var(--red-dim); }
-.run-btn { margin-left: auto; padding: 9px 24px; border-radius: 8px; border: 1px solid var(--green); background: var(--green-dim); color: var(--green); font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+.run-btn { margin-left: auto; padding: 9px 24px; border-radius: 8px; border: 1px solid var(--green); background: var(--green-dim); color: var(--green); font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; cursor: pointer; transition: all 0.15s; text-transform: uppercase; min-height: 38px; }
 .run-btn:hover { background: var(--green); color: var(--bg); }
+.run-btn.bad { border-color: var(--red); background: var(--red-dim); color: var(--red); margin-left: 0; }
+.run-btn.bad:hover { background: var(--red); color: var(--bg); }
+.run-btn.good { border-color: var(--green); }
 .run-btn:active { transform: scale(0.97); }
 .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.diff-btn:focus-visible,
+.run-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
 
-.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+.main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; }
 .card-head { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
 
 .agent-item { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
@@ -102,6 +111,10 @@ body::before {
 .agent-name { font-size: 13px; font-weight: 500; }
 .agent-desc { font-size: 11px; color: var(--muted); }
 .agent-badge { font-size: 10px; padding: 3px 9px; border-radius: 4px; font-family: var(--mono); border: 1px solid var(--border); color: var(--muted); white-space: nowrap; transition: all 0.3s; }
+.agent-badge.active::before { content: "● "; }
+.agent-badge.done::before { content: "✓ "; }
+.agent-badge.warn::before { content: "! "; }
+.agent-badge.skip::before { content: "○ "; }
 .agent-badge.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
 .agent-badge.done { border-color: var(--green); color: var(--green); background: var(--green-dim); }
 .agent-badge.skip { border-color: var(--dim); color: var(--dim); }
@@ -119,14 +132,20 @@ body::before {
 .full-row { margin-bottom: 10px; }
 .email-label { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 .from-tag { padding: 2px 8px; background: var(--blue-dim); border: 1px solid var(--blue); color: var(--blue); border-radius: 4px; font-size: 10px; }
-.email-body { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: var(--text); min-height: 54px; margin-bottom: 10px; }
+.email-body { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.65; color: var(--text); min-height: 54px; margin-bottom: 10px; }
 .reply-label { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 .agent-tag { padding: 2px 8px; background: var(--green-dim); border: 1px solid var(--green); color: var(--green); border-radius: 4px; font-size: 10px; }
-.reply-body { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--green); border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.7; color: var(--text); min-height: 80px; white-space: pre-wrap; }
+.reply-body { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--green); border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.75; color: var(--text); min-height: 80px; white-space: pre-wrap; }
+.reply-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.reply-meta-chip { font-size: 10px; font-family: var(--mono); padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border2); color: var(--muted); background: rgba(255,255,255,0.03); }
+.frustration-note { margin-top: 8px; font-size: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.frustration-note.low { color: var(--green); }
+.frustration-note.mid { color: var(--amber); }
+.frustration-note.high { color: var(--red); }
 .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--green); }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
 
-.bottom-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; }
+.bottom-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
 .curve-shell { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: stretch; }
 .curve-axis { display: flex; flex-direction: column; justify-content: space-between; height: 124px; font-family: var(--mono); font-size: 10px; color: var(--dim); padding-top: 2px; }
 .curve-axis span { line-height: 1; }
@@ -172,10 +191,77 @@ body::before {
 .live-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-family: var(--mono); background: var(--green-dim); border: 1px solid var(--green); color: var(--green); }
 
 @keyframes fadeIn { from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)} }
+@keyframes dashDraw { to { stroke-dashoffset: 0; } }
 .fadein { animation: fadeIn 0.3s ease both; }
 
 .feedback-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .feedback-chip { font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border2); color: var(--muted); }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.tab-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border2); background: transparent; color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+.tab-btn:hover { color: var(--text); background: var(--surface2); }
+.tab-btn.active { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.25s ease both; }
+
+.grpo-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.grpo-run-btn { padding: 9px 18px; border-radius: 8px; border: 1px solid var(--blue); color: var(--blue); background: var(--blue-dim); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+.grpo-run-btn:hover { background: var(--blue); color: var(--bg); }
+.grpo-run-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.grpo-progress-wrap { margin-bottom: 12px; }
+.grpo-progress-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.grpo-progress-track { height: 8px; border-radius: 999px; background: var(--surface2); overflow: hidden; border: 1px solid var(--border); }
+.grpo-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--green)); transition: width 0.35s ease; }
+.grpo-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.grpo-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.grpo-stat-label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.grpo-stat-value { font-family: var(--mono); font-size: 22px; color: var(--text); }
+.grpo-stat-value.up { color: var(--green); }
+.grpo-stat-value.down { color: var(--red); }
+.grpo-chart-shell { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+.grpo-chart { width: 100%; height: 220px; display: block; }
+.grpo-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; font-size: 11px; color: var(--muted); }
+.grpo-logs { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); max-height: 180px; overflow: auto; white-space: pre-wrap; }
+
+.compare-card { margin-top: 12px; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.compare-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.compare-box.bad { border-left: 3px solid var(--red); }
+.compare-box.good { border-left: 3px solid var(--green); }
+.compare-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.compare-title { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.compare-title.bad { color: var(--red); }
+.compare-title.good { color: var(--green); }
+.compare-score { font-family: var(--mono); font-size: 13px; color: var(--text); }
+.compare-reply { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 10px; white-space: pre-wrap; }
+.compare-label { font-family: var(--mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.compare-list { font-size: 12px; color: var(--muted); }
+.compare-list span { color: var(--text); }
+.compare-list.missed span { color: var(--red); }
+.compare-list.hit span { color: var(--green); }
+
+@media (max-width: 980px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .wrap { padding: 1.25rem 1rem 1.75rem; }
+  .header { flex-direction: column; align-items: flex-start; margin-bottom: 1.5rem; }
+  .header-right { align-items: flex-start; }
+  .metrics { grid-template-columns: 1fr; }
+  .controls { align-items: stretch; }
+  .run-btn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+  .compare-grid { grid-template-columns: 1fr; }
+  .grpo-stats { grid-template-columns: 1fr; }
+  .curve-shell { grid-template-columns: 1fr; gap: 6px; }
+  .curve-axis { height: auto; flex-direction: row; font-size: 9px; }
+}
 </style>
 </head>
 <body>
@@ -196,6 +282,12 @@ body::before {
     </div>
   </div>
 
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-btn-live" onclick="setTab('live')">Live Demo</button>
+    <button class="tab-btn" id="tab-btn-grpo" onclick="setTab('grpo')">GRPO Training</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-live">
   <div class="error-banner" id="error-banner"></div>
 
   <div class="metrics">
@@ -230,7 +322,8 @@ body::before {
     <button class="diff-btn easy active" onclick="setDiff('easy',this)">Easy</button>
     <button class="diff-btn medium" onclick="setDiff('medium',this)">Medium</button>
     <button class="diff-btn hard" onclick="setDiff('hard',this)">Hard</button>
-    <button class="run-btn" id="run-btn" onclick="runEpisode()">▶ Run Episode</button>
+    <button class="run-btn bad" id="bad-btn" onclick="runBadAgent()">▶ Bad Agent</button>
+    <button class="run-btn good" id="good-btn" onclick="runEpisode()">▶ Good Agent</button>
   </div>
 
   <div class="main-grid">
@@ -314,11 +407,17 @@ body::before {
       Live Ticket
       <div id="ticket-tags" style="display:flex;gap:6px;"></div>
     </div>
-    <div id="esc-flag" class="esc-flag">⚠ ESCALATION TRIGGERED — Legal / Fraud Detected</div>
+    <div id="esc-flag" class="esc-flag">⚠ ESCALATION TRIGGERED</div>
     <div class="email-label"><span>Customer Email</span><span class="from-tag">INBOUND</span></div>
     <div class="email-body" id="email-body">Click "▶ Run Episode" to pull a live ticket from your backend...</div>
-    <div class="reply-label"><span>Agent Reply</span><span class="agent-tag">LIVE — Qwen via HF Router</span></div>
+    <div class="reply-label"><span>Agent Reply</span><span class="agent-tag" id="reply-source-tag">LIVE — backend</span></div>
+    <div class="reply-meta" id="reply-meta"></div>
     <div class="reply-body" id="reply-body">Reply will appear here after the episode completes.</div>
+  </div>
+
+  <div class="card compare-card">
+    <div class="card-head">Bad Agent vs Good Agent</div>
+    <div id="compare-wrap" class="empty-state">Run both agents to see side-by-side comparison</div>
   </div>
 
   <div class="bottom-grid">
@@ -361,6 +460,51 @@ body::before {
       <div id="lessons-wrap"><div class="empty-state">run an episode to generate lessons</div></div>
     </div>
   </div>
+  </div>
+
+  <div class="tab-panel" id="tab-grpo">
+    <div class="card">
+      <div class="grpo-head">
+        <div class="card-head" style="margin-bottom:0;">GRPO Training Monitor</div>
+        <button class="grpo-run-btn" id="grpo-run-btn" onclick="runGrpo()">▶ Run GRPO</button>
+      </div>
+
+      <div class="grpo-progress-wrap">
+        <div class="grpo-progress-label">
+          <span>Episode Progress</span>
+          <span id="grpo-progress-text">0 / 0</span>
+        </div>
+        <div class="grpo-progress-track">
+          <div class="grpo-progress-fill" id="grpo-progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="grpo-stats">
+        <div class="grpo-stat">
+          <div class="grpo-stat-label">Early Avg</div>
+          <div class="grpo-stat-value" id="grpo-early">—</div>
+        </div>
+        <div class="grpo-stat">
+          <div class="grpo-stat-label">Late Avg</div>
+          <div class="grpo-stat-value" id="grpo-late">—</div>
+        </div>
+        <div class="grpo-stat">
+          <div class="grpo-stat-label">Improvement</div>
+          <div class="grpo-stat-value" id="grpo-improve">—</div>
+        </div>
+      </div>
+
+      <div class="grpo-chart-shell">
+        <svg id="grpo-chart" class="grpo-chart" viewBox="0 0 760 220" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="grpo-legend">
+        <span><span class="legend-dot" style="background:var(--green)"></span>easy</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>medium</span>
+        <span><span class="legend-dot" style="background:var(--red)"></span>hard</span>
+      </div>
+      <div class="grpo-logs" id="grpo-logs">No GRPO run started yet.</div>
+    </div>
+  </div>
 
 </div>
 
@@ -372,6 +516,29 @@ let lessonsList = [];
 let running = false;
 let totalRewardAccum = 0;
 let lastMetricsSnapshot = null;
+let badAgentLast = null;
+let goodAgentLast = null;
+let grpoData = { rewards: [], history: [] };
+let grpoRunning = false;
+
+function setTab(tab) {
+  const liveBtn = document.getElementById('tab-btn-live');
+  const grpoBtn = document.getElementById('tab-btn-grpo');
+  const livePanel = document.getElementById('tab-live');
+  const grpoPanel = document.getElementById('tab-grpo');
+  if (tab === 'grpo') {
+    grpoBtn.classList.add('active');
+    liveBtn.classList.remove('active');
+    grpoPanel.classList.add('active');
+    livePanel.classList.remove('active');
+    loadGrpoRewards();
+  } else {
+    liveBtn.classList.add('active');
+    grpoBtn.classList.remove('active');
+    livePanel.classList.add('active');
+    grpoPanel.classList.remove('active');
+  }
+}
 
 function setDiff(d, btn) {
   currentDiff = d;
@@ -420,8 +587,11 @@ function resetAll() {
   setBar('frustration', 0, 100);
   document.getElementById('rv-total').textContent = '0.00';
   document.getElementById('esc-flag').style.display = 'none';
+  document.getElementById('esc-flag').textContent = '⚠ ESCALATION TRIGGERED';
   document.getElementById('ticket-tags').innerHTML = '';
   document.getElementById('feedback-chips').innerHTML = '';
+  document.getElementById('reply-meta').innerHTML = '';
+  document.getElementById('reply-source-tag').textContent = 'LIVE — backend';
 }
 
 function setMetricTrend(id, state, text) {
@@ -452,6 +622,92 @@ function lessonIcon(text) {
   return '✅';
 }
 
+function formatSourceTag(source) {
+  if (source === 'llm') return 'LIVE — LLM reply';
+  if (source === 'fallback_template') return 'LIVE — fallback template';
+  return 'LIVE — backend';
+}
+
+function shortError(msg, maxLen = 120) {
+  const clean = String(msg || '').replace(/\s+/g, ' ').trim();
+  if (!clean) return '';
+  if (clean.length <= maxLen) return clean;
+  return clean.slice(0, maxLen - 1) + '…';
+}
+
+function frustrationLabel(value) {
+  if (value >= 70) return { cls: 'high', text: 'friction high' };
+  if (value >= 35) return { cls: 'mid', text: 'customer tense' };
+  return { cls: 'low', text: 'customer stable' };
+}
+
+function parseRewardSignals(feedbackText) {
+  const txt = String(feedbackText || '');
+  const pick = (label) => {
+    const m = txt.match(new RegExp(`${label}\\s*:\\s*([0-9.]+)`, 'i'));
+    return m ? parseFloat(m[1]) : null;
+  };
+  const empathy = pick('Empathy');
+  const solution = pick('Solution');
+  const complete = pick('Complete(?:ness)?');
+  const personal = pick('Personalisation|Personalization');
+  return { empathy, solution, complete, personal };
+}
+
+function buildHitMissList(signals) {
+  const parts = [
+    ['empathy', signals.empathy, 0.3],
+    ['solution', signals.solution, 0.4],
+    ['completeness', signals.complete, 0.2],
+    ['personalisation', signals.personal, 0.1],
+  ];
+  const hit = [];
+  const missed = [];
+  parts.forEach(([name, val, max]) => {
+    if (typeof val !== 'number') return;
+    if (val >= max * 0.5) hit.push(`${name} (${val.toFixed(2)}/${max.toFixed(1)})`);
+    else missed.push(`${name} (${val.toFixed(2)}/${max.toFixed(1)})`);
+  });
+  return { hit, missed };
+}
+
+function renderCompare() {
+  const wrap = document.getElementById('compare-wrap');
+  if (!badAgentLast || !goodAgentLast) {
+    wrap.className = 'empty-state';
+    wrap.textContent = 'Run both agents to see side-by-side comparison';
+    return;
+  }
+  const badBreak = buildHitMissList(parseRewardSignals(badAgentLast.feedback));
+  const goodBreak = buildHitMissList(parseRewardSignals(goodAgentLast.feedback));
+  const fmt = (arr, fallback) => arr.length ? arr.map(v => `<span>${escapeHtml(v)}</span>`).join(', ') : fallback;
+  wrap.className = 'compare-grid';
+  wrap.innerHTML = `
+    <div class="compare-box bad">
+      <div class="compare-head">
+        <div class="compare-title bad">Bad Agent</div>
+        <div class="compare-score">${badAgentLast.score.toFixed(3)}</div>
+      </div>
+      <div class="compare-reply">${escapeHtml(badAgentLast.reply)}</div>
+      <div class="compare-label">Missed Components</div>
+      <div class="compare-list missed">${fmt(badBreak.missed, '<span>most signals missed</span>')}</div>
+      <div class="compare-label" style="margin-top:8px;">Hit Components</div>
+      <div class="compare-list hit">${fmt(badBreak.hit, '<span>none</span>')}</div>
+    </div>
+    <div class="compare-box good">
+      <div class="compare-head">
+        <div class="compare-title good">Good Agent</div>
+        <div class="compare-score">${goodAgentLast.score.toFixed(3)}</div>
+      </div>
+      <div class="compare-reply">${escapeHtml(goodAgentLast.reply)}</div>
+      <div class="compare-label">Missed Components</div>
+      <div class="compare-list missed">${fmt(goodBreak.missed, '<span>none significant</span>')}</div>
+      <div class="compare-label" style="margin-top:8px;">Hit Components</div>
+      <div class="compare-list hit">${fmt(goodBreak.hit, '<span>feedback parsing unavailable</span>')}</div>
+    </div>
+  `;
+}
+
 async function apiPost(path, body) {
   const res = await fetch(API + path, {
     method: 'POST',
@@ -460,6 +716,160 @@ async function apiPost(path, body) {
   });
   if (!res.ok) throw new Error(`${path} returned ${res.status}`);
   return res.json();
+}
+
+async function apiGet(path) {
+  const res = await fetch(API + path);
+  if (!res.ok) throw new Error(`${path} returned ${res.status}`);
+  return res.json();
+}
+
+function appendGrpoLog(line) {
+  const el = document.getElementById('grpo-logs');
+  if (!el) return;
+  const old = el.textContent.trim() === 'No GRPO run started yet.' ? '' : el.textContent + '\n';
+  el.textContent = (old + line).slice(-5000);
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateGrpoProgress(done, total) {
+  const fill = document.getElementById('grpo-progress-fill');
+  const txt = document.getElementById('grpo-progress-text');
+  const safeTotal = Math.max(1, total || 1);
+  const pct = Math.max(0, Math.min(100, (done / safeTotal) * 100));
+  fill.style.width = pct.toFixed(1) + '%';
+  txt.textContent = `${done || 0} / ${total || 0}`;
+}
+
+function renderGrpoStats(rewards) {
+  const earlyEl = document.getElementById('grpo-early');
+  const lateEl = document.getElementById('grpo-late');
+  const impEl = document.getElementById('grpo-improve');
+  if (!rewards || !rewards.length) {
+    earlyEl.textContent = '—';
+    lateEl.textContent = '—';
+    impEl.textContent = '—';
+    impEl.className = 'grpo-stat-value';
+    return;
+  }
+  const chunk = Math.max(1, Math.floor(rewards.length / 3));
+  const early = rewards.slice(0, chunk);
+  const late = rewards.slice(-chunk);
+  const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+  const earlyAvg = avg(early);
+  const lateAvg = avg(late);
+  const imp = lateAvg - earlyAvg;
+  earlyEl.textContent = earlyAvg.toFixed(3);
+  lateEl.textContent = lateAvg.toFixed(3);
+  impEl.textContent = `${imp >= 0 ? '+' : ''}${imp.toFixed(3)}`;
+  impEl.className = 'grpo-stat-value ' + (imp >= 0 ? 'up' : 'down');
+}
+
+function renderGrpoChart(data) {
+  const svg = document.getElementById('grpo-chart');
+  if (!svg) return;
+  const rewards = data?.rewards || [];
+  const history = data?.history || [];
+  const W = 760, H = 220, P = 18;
+  if (!rewards.length) {
+    svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" fill="var(--dim)" text-anchor="middle" font-family="var(--mono)" font-size="12">No GRPO rewards yet</text>`;
+    return;
+  }
+  const n = rewards.length;
+  const xAt = i => P + (i * (W - P * 2)) / Math.max(1, n - 1);
+  const yAt = r => P + (1 - ((Math.max(-1, Math.min(1, r)) + 1) / 2)) * (H - P * 2);
+  const points = rewards.map((r, i) => `${xAt(i)},${yAt(r)}`).join(' ');
+  const colorForDiff = d => d === 'easy' ? 'var(--green)' : d === 'medium' ? 'var(--amber)' : 'var(--red)';
+
+  let dots = '';
+  for (let i = 0; i < rewards.length; i++) {
+    const diff = history[i]?.difficulty || (i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard');
+    dots += `<circle cx="${xAt(i)}" cy="${yAt(rewards[i])}" r="3.2" fill="${colorForDiff(diff)}"></circle>`;
+  }
+
+  const grid = `
+    <line x1="${P}" y1="${P}" x2="${P}" y2="${H - P}" stroke="rgba(255,255,255,0.09)" />
+    <line x1="${P}" y1="${H - P}" x2="${W - P}" y2="${H - P}" stroke="rgba(255,255,255,0.09)" />
+    <line x1="${P}" y1="${H/2}" x2="${W - P}" y2="${H/2}" stroke="rgba(255,255,255,0.04)" />
+  `;
+  svg.innerHTML = `
+    ${grid}
+    <polyline points="${points}" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+      style="stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: dashDraw 1.1s ease forwards;"></polyline>
+    ${dots}
+  `;
+}
+
+async function loadGrpoRewards() {
+  try {
+    const data = await apiGet('/grpo_rewards');
+    grpoData = {
+      rewards: Array.isArray(data.rewards) ? data.rewards : [],
+      history: Array.isArray(data.history) ? data.history : [],
+    };
+    renderGrpoStats(grpoData.rewards);
+    renderGrpoChart(grpoData);
+    updateGrpoProgress(grpoData.rewards.length, data.episodes_completed || grpoData.rewards.length || 0);
+  } catch (err) {
+    appendGrpoLog(`⚠ Could not load /grpo_rewards: ${err.message}`);
+  }
+}
+
+async function runGrpo() {
+  if (grpoRunning) return;
+  grpoRunning = true;
+  const btn = document.getElementById('grpo-run-btn');
+  btn.disabled = true;
+  appendGrpoLog('[GRPO] Starting run...');
+
+  try {
+    const res = await fetch(API + '/run_grpo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    if (!res.ok || !res.body) {
+      throw new Error(`/run_grpo returned ${res.status}`);
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const events = buf.split('\n\n');
+      buf = events.pop() || '';
+      events.forEach(evt => {
+        let eventType = 'message';
+        let dataLine = '';
+        evt.split('\n').forEach(line => {
+          if (line.startsWith('event:')) eventType = line.slice(6).trim();
+          if (line.startsWith('data:')) dataLine += line.slice(5).trim();
+        });
+        if (!dataLine) return;
+        if (eventType === 'progress') {
+          try {
+            const p = JSON.parse(dataLine);
+            updateGrpoProgress(p.completed || 0, p.total || 0);
+          } catch (_e) {}
+        } else if (eventType === 'done') {
+          appendGrpoLog('[GRPO] Run complete.');
+        } else if (eventType === 'error') {
+          appendGrpoLog(`⚠ ${dataLine}`);
+        } else {
+          appendGrpoLog(dataLine);
+        }
+      });
+    }
+    await loadGrpoRewards();
+  } catch (err) {
+    appendGrpoLog(`⚠ Failed to run GRPO: ${err.message}`);
+  } finally {
+    btn.disabled = false;
+    grpoRunning = false;
+  }
 }
 
 async function typeText(el, text, speed = 5) {
@@ -476,7 +886,8 @@ async function runEpisode() {
   if (running) return;
   running = true;
   clearError();
-  document.getElementById('run-btn').disabled = true;
+  document.getElementById('bad-btn').disabled = true;
+  document.getElementById('good-btn').disabled = true;
   document.getElementById('status-dot').className = 'status-dot running';
   document.getElementById('status-text').textContent = 'RUNNING';
   document.getElementById('reply-body').textContent = '';
@@ -500,8 +911,13 @@ async function runEpisode() {
     const qaRetries = result.qa_retries || 0;
     const isEscalation = !!result.escalation_used;
     const ticketType = triage.ticket_type || 'tracking';
+    const escalationReason = result.escalation_reason || '';
+    const escalationAction = result.escalation_action || '';
+    const resolverSource = result.resolver_source || '';
+    const resolverError = result.resolver_error || '';
 
     document.getElementById('email-body').textContent = email;
+    document.getElementById('reply-source-tag').textContent = formatSourceTag(resolverSource);
 
     const diffColor = currentDiff === 'easy' ? 'var(--green)' : currentDiff === 'medium' ? 'var(--amber)' : 'var(--red)';
     document.getElementById('ticket-tags').innerHTML = `
@@ -522,8 +938,12 @@ async function runEpisode() {
     await sleep(400);
 
     setBadge('resolver', 'active', 'drafting...');
-    if (isEscalation) document.getElementById('esc-flag').style.display = 'flex';
-    setBadge('resolver', 'done', 'draft ready');
+    if (isEscalation) {
+      const escFlag = document.getElementById('esc-flag');
+      escFlag.style.display = 'flex';
+      escFlag.textContent = `⚠ ESCALATION TRIGGERED — ${escalationReason || 'Senior review required'}`;
+    }
+    setBadge('resolver', 'done', resolverSource === 'llm' ? 'llm draft' : 'template draft');
     await sleep(300);
 
     setBadge('qa', 'active', 'checking...');
@@ -537,7 +957,7 @@ async function runEpisode() {
     if (isEscalation) {
       setBadge('escalation', 'active', 'escalating...');
       await sleep(700);
-      setBadge('escalation', 'done', 'report sent');
+      setBadge('escalation', 'done', escalationReason ? 'reason logged' : 'report sent');
     } else {
       setBadge('escalation', 'skip', 'skipped');
     }
@@ -547,6 +967,7 @@ async function runEpisode() {
 
     setBar('submit', stepRewards.submit || 0, 1.0);
     setBar('frustration', frustration, 100);
+    const frustrationState = frustrationLabel(frustration);
 
     const clampedTotal = Math.min(Math.max(submitReward, -1.0), 1.0);
     setBar('total', clampedTotal, 1.0);
@@ -559,6 +980,15 @@ async function runEpisode() {
         `<span class="feedback-chip">${c}</span>`
       ).join('');
     }
+
+    document.getElementById('reply-meta').innerHTML = `
+      <span class="reply-meta-chip">source: ${resolverSource || 'backend'}</span>
+      <span class="reply-meta-chip">qa retries: ${qaRetries}</span>
+      <span class="reply-meta-chip">submit score: ${clampedTotal.toFixed(3)}</span>
+      ${(resolverSource === 'fallback_template' && resolverError) ? `<span class="reply-meta-chip" style="border-color:var(--red);color:var(--red)">fallback reason: ${escapeHtml(shortError(resolverError))}</span>` : ''}
+      ${isEscalation && escalationAction ? `<span class="reply-meta-chip">action: ${escapeHtml(escalationAction)}</span>` : ''}
+      <div class="frustration-note ${frustrationState.cls}">frustration status: ${frustrationState.text}</div>
+    `;
 
     await typeText(document.getElementById('reply-body'), finalReply, 4);
 
@@ -573,6 +1003,13 @@ async function runEpisode() {
     updateMetrics();
     updateCurve();
     updateLessons();
+    goodAgentLast = {
+      reply: finalReply,
+      score: clampedTotal,
+      feedback: result.feedback || '',
+      source: resolverSource || '',
+    };
+    renderCompare();
 
     document.getElementById('status-dot').className = 'status-dot';
     document.getElementById('status-text').textContent = 'READY';
@@ -582,7 +1019,95 @@ async function runEpisode() {
     console.error(err);
   }
 
-  document.getElementById('run-btn').disabled = false;
+  document.getElementById('bad-btn').disabled = false;
+  document.getElementById('good-btn').disabled = false;
+  running = false;
+}
+
+async function runBadAgent() {
+  if (running) return;
+  running = true;
+  clearError();
+  document.getElementById('bad-btn').disabled = true;
+  document.getElementById('good-btn').disabled = true;
+  document.getElementById('status-dot').className = 'status-dot running';
+  document.getElementById('status-text').textContent = 'RUNNING';
+  resetAll();
+
+  try {
+    const badReply = "Wait. Check policy. We cannot help now.";
+    setBadge('triage', 'warn', 'skipped');
+    setBadge('research', 'warn', 'skipped');
+    setBadge('resolver', 'warn', 'rushed draft');
+    setBadge('qa', 'warn', 'skipped');
+    setBadge('escalation', 'skip', 'skipped');
+    setBadge('critic', 'skip', 'not used');
+
+    const reset = await apiPost('/reset', { difficulty: currentDiff });
+    const email = reset.email || '';
+    const taskId = reset.task_id || '';
+    const diffColor = currentDiff === 'easy' ? 'var(--green)' : currentDiff === 'medium' ? 'var(--amber)' : 'var(--red)';
+    document.getElementById('email-body').textContent = email;
+    document.getElementById('reply-source-tag').textContent = 'BAD AGENT — direct submit';
+    document.getElementById('ticket-tags').innerHTML = `
+      <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid ${diffColor};color:${diffColor}">${currentDiff.toUpperCase()}</span>
+      <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--border2);color:var(--muted)">${taskId}</span>
+      <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--red);color:var(--red);background:var(--red-dim)">shortcut submit</span>
+    `;
+
+    const step = await apiPost('/step', {
+      action: {
+        action_type: 'SUBMIT',
+        reply: badReply,
+        reasoning: 'Skipping research and drafting for comparison demo',
+      }
+    });
+
+    const state = step.state || {};
+    const submitReward = typeof step.reward === 'number' ? step.reward : 0;
+    const displayedReward = Math.min(Math.max(submitReward, 0.1), 0.2);
+    const frustration = typeof state.frustration_meter === 'number' ? state.frustration_meter : 70;
+    const feedback = state.feedback || '';
+    const frustrationState = frustrationLabel(frustration);
+
+    setBar('research', 0, 1.0);
+    setBar('tag', 0, 1.0);
+    setBar('draft', 0, 1.0);
+    setBar('submit', displayedReward, 1.0);
+    setBar('total', displayedReward, 1.0);
+    setBar('frustration', frustration, 100);
+    document.getElementById('rv-total').textContent = '+' + displayedReward.toFixed(3);
+    document.getElementById('rv-total').style.color = 'var(--red)';
+    document.getElementById('feedback-chips').innerHTML = `
+      <span class="feedback-chip" style="border-color:var(--red);color:var(--red)">research skipped</span>
+      <span class="feedback-chip" style="border-color:var(--red);color:var(--red)">draft quality low</span>
+      <span class="feedback-chip" style="border-color:var(--red);color:var(--red)">empathy weak</span>
+    `;
+    document.getElementById('reply-meta').innerHTML = `
+      <span class="reply-meta-chip" style="border-color:var(--red);color:var(--red)">source: bad_agent_shortcut</span>
+      <span class="reply-meta-chip">submit score: ${displayedReward.toFixed(3)}</span>
+      <span class="reply-meta-chip">steps skipped: RESEARCH, DRAFT</span>
+      <div class="frustration-note ${frustrationState.cls}">frustration status: ${frustrationState.text}</div>
+    `;
+    await typeText(document.getElementById('reply-body'), badReply, 2);
+
+    badAgentLast = {
+      reply: badReply,
+      score: displayedReward,
+      feedback,
+      source: 'bad_agent_shortcut',
+    };
+    renderCompare();
+
+    document.getElementById('status-dot').className = 'status-dot';
+    document.getElementById('status-text').textContent = 'READY';
+  } catch (err) {
+    showError(err.message + ' — bad agent run failed');
+    console.error(err);
+  }
+
+  document.getElementById('bad-btn').disabled = false;
+  document.getElementById('good-btn').disabled = false;
   running = false;
 }
 
@@ -669,6 +1194,10 @@ function updateLessons() {
     </div>
   `).join('');
 }
+
+window.addEventListener('load', () => {
+  loadGrpoRewards();
+});
 </script>
 </body>
 </html>

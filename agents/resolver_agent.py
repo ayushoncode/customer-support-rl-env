@@ -82,6 +82,7 @@ def run(
             "source": "fallback_template",
             "ticket_type": ticket_type,
             "needs_escalation": needs_escalation,
+            "llm_error": "HF_TOKEN missing or empty",
         }
 
     try:
@@ -136,6 +137,7 @@ Write ONLY the customer reply. No subject line, no meta-commentary.
             "source": "llm",
             "ticket_type": ticket_type,
             "needs_escalation": needs_escalation,
+            "llm_error": "",
         }
 
     except Exception as e:
@@ -145,4 +147,5 @@ Write ONLY the customer reply. No subject line, no meta-commentary.
             "source": "fallback_template",
             "ticket_type": ticket_type,
             "needs_escalation": needs_escalation,
+            "llm_error": str(e),
         }

@@ -1,74 +1,74 @@
 {
   "lessons": [
     {
-      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
-      "episode": 27,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:09:55.072664"
+      "lesson": "For refund tickets, ensure the refund amount is clearly stated and avoid trailing off at the end of the message \u2014 completing the sentence with a clear offer of additional assistance can improve the 'Complete' score by 0.10.",
+      "episode": 86,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:20:18.029207"
     },
     {
-      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
-      "episode": 28,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:10:20.007321"
+      "lesson": "For tracking tickets, always reference the specific order number or product in your response to increase personalization \u2014 this can improve the frustration shift score by 0.20.",
+      "episode": 87,
+      "reward": 0.95,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:21:55.324374"
     },
     {
-      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
-      "episode": 29,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:11:19.359507"
+      "lesson": "For tracking tickets, when apologizing for delays, specify a clear action and timeline for resolution to reduce frustration and improve completeness scores; e.g., \"I will ensure that you receive the tracking details by 3 PM tomorrow.\"",
+      "episode": 88,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:26:42.466675"
     },
     {
-      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
-      "episode": 30,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:11:25.369248"
+      "lesson": "For tracking tickets, always provide a specific follow-up action or step being taken, such as \"I will check on your order and ensure that you receive the tracking details by 3 PM tomorrow\" to increase the solution score and reduce frustration.",
+      "episode": 89,
+      "reward": 0.8,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:27:54.839561"
     },
     {
-      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
-      "episode": 31,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:11:31.364882"
+      "lesson": "For tracking tickets, ensure the reply is complete by providing a full sentence at the end of the message \u2014 incomplete sentences can lead to a drop in completeness score, as seen in this case where the score was 0.20.",
+      "episode": 90,
+      "reward": 0.8,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:28:14.486338"
     },
     {
-      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
-      "episode": 32,
+      "lesson": "For tracking tickets, ensure you provide a clear timeline or next steps after escalation \u2014 saying \"We will initiate a carrier check and update you within the next 24 hours\" improves solution completeness by 0.15.",
+      "episode": 91,
       "reward": 0.75,
       "difficulty": "hard",
-      "timestamp": "2026-04-25T12:13:19.313560"
+      "timestamp": "2026-04-25T15:28:41.533039"
     },
     {
-      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
-      "episode": 33,
+      "lesson": "For tracking tickets, when apologizing for delays, specify the exact steps being taken to resolve the issue \u2014 saying \"I will check on your order and ensure that you receive the tracking details by 3 PM tomorrow\" is effective, but also mention any additional actions like \"I have escalated this to our fulfillment team to expedite the process.\"",
+      "episode": 92,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T15:31:13.328497"
+    },
+    {
+      "lesson": "For fraud tickets, after expressing empathy, immediately state \"your account has been secured\" to provide reassurance before explaining further steps \u2014 this improves security reassurance and overall customer satisfaction.",
+      "episode": 93,
       "reward": 0.75,
       "difficulty": "hard",
-      "timestamp": "2026-04-25T12:13:24.679200"
+      "timestamp": "2026-04-25T15:31:42.830103"
     },
     {
-      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
-      "episode": 34,
-      "reward": 0.75,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T12:13:31.746290"
+      "lesson": "For tracking tickets, ensure you provide a clear and specific action step, such as \"I will send you the updated tracking information by 3 PM tomorrow\" instead of saying \"I will check on your order.\" This increases the solution score and reduces customer frustration.",
+      "episode": 99,
+      "reward": 0.92,
+      "difficulty": "easy",
+      "timestamp": "2026-04-25T16:36:46.202752"
     },
     {
-      "lesson": "Wrong item tickets: offer replacement AND prepaid return label in the same sentence \u2014 removing all friction maximises solution score.",
-      "episode": 35,
-      "reward": 0.84,
+      "lesson": "For wrong_item tickets, after acknowledging the issue, specify the exact steps being taken, such as \"I will initiate a replacement for the correct USB Hub and ensure it is sent to you within the next 24 hours.\" This increases solution clarity and reduces customer frustration.",
+      "episode": 100,
+      "reward": 0.8,
       "difficulty": "medium",
-      "timestamp": "2026-04-25T12:13:37.445199"
-    },
-    {
-      "lesson": "MISSED: Did not confirm the duplicate charge was found. Next time: say 'I have confirmed the duplicate charge on your account' first. | Legal/fraud keywords detected but escalation missing \u2014 always mention senior team for these cases. | 3 QA retries added -0.15 penalty.",
-      "episode": 36,
-      "reward": 0.75,
-      "difficulty": "medium",
-      "timestamp": "2026-04-25T12:13:41.612965"
+      "timestamp": "2026-04-25T16:37:20.262659"
     }
   ],
   "episode_history": [
@@ -323,6 +323,454 @@
       "difficulty": "medium",
       "task_id": "medium_billing",
       "timestamp": "2026-04-25T12:13:41.614708"
+    },
+    {
+      "episode": 37,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T12:21:51.637466"
+    },
+    {
+      "episode": 38,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T12:22:11.788673"
+    },
+    {
+      "episode": 39,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T12:22:30.641851"
+    },
+    {
+      "episode": 40,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T12:23:22.473344"
+    },
+    {
+      "episode": 41,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T12:23:48.087407"
+    },
+    {
+      "episode": 42,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T13:18:09.772573"
+    },
+    {
+      "episode": 43,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T13:18:16.700096"
+    },
+    {
+      "episode": 44,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T13:22:31.204264"
+    },
+    {
+      "episode": 45,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T13:22:39.357259"
+    },
+    {
+      "episode": 46,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T13:22:48.887031"
+    },
+    {
+      "episode": 47,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T13:23:10.827724"
+    },
+    {
+      "episode": 48,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T13:26:52.474425"
+    },
+    {
+      "episode": 49,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T13:28:58.359759"
+    },
+    {
+      "episode": 50,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T13:29:10.032066"
+    },
+    {
+      "episode": 51,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T13:29:13.598770"
+    },
+    {
+      "episode": 52,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T13:29:27.762202"
+    },
+    {
+      "episode": 53,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T13:29:37.099160"
+    },
+    {
+      "episode": 54,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T13:37:18.019144"
+    },
+    {
+      "episode": 55,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T13:39:12.731713"
+    },
+    {
+      "episode": 56,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T13:39:57.387970"
+    },
+    {
+      "episode": 57,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T13:40:27.756316"
+    },
+    {
+      "episode": 58,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T13:40:55.605771"
+    },
+    {
+      "episode": 59,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T14:56:41.511703"
+    },
+    {
+      "episode": 60,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T14:57:17.817232"
+    },
+    {
+      "episode": 61,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T14:58:40.122862"
+    },
+    {
+      "episode": 1,
+      "reward": 0.4,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:05:18.244659"
+    },
+    {
+      "episode": 2,
+      "reward": 0.31,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T15:05:18.246677"
+    },
+    {
+      "episode": 3,
+      "reward": 0.39,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:05:18.247387"
+    },
+    {
+      "episode": 4,
+      "reward": 0.4,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:05:18.248055"
+    },
+    {
+      "episode": 5,
+      "reward": 0.35,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T15:05:18.248726"
+    },
+    {
+      "episode": 6,
+      "reward": 0.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T15:05:18.249385"
+    },
+    {
+      "episode": 7,
+      "reward": 0.65,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:05:18.250432"
+    },
+    {
+      "episode": 8,
+      "reward": 0.4,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T15:05:18.251180"
+    },
+    {
+      "episode": 9,
+      "reward": 0.25,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T15:05:18.251874"
+    },
+    {
+      "episode": 10,
+      "reward": 0.4,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:05:18.253003"
+    },
+    {
+      "episode": 11,
+      "reward": 0.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T15:05:18.253936"
+    },
+    {
+      "episode": 12,
+      "reward": 0.41,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:05:18.255290"
+    },
+    {
+      "episode": 13,
+      "reward": 0.45,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:05:18.256118"
+    },
+    {
+      "episode": 14,
+      "reward": 0.37,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T15:05:18.256931"
+    },
+    {
+      "episode": 15,
+      "reward": 0.41,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:05:18.257737"
+    },
+    {
+      "episode": 16,
+      "reward": 0.8,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:05:18.258547"
+    },
+    {
+      "episode": 17,
+      "reward": 0.48,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T15:05:18.260036"
+    },
+    {
+      "episode": 18,
+      "reward": 0.41,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:05:18.260896"
+    },
+    {
+      "episode": 19,
+      "reward": 0.8,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:05:18.261786"
+    },
+    {
+      "episode": 20,
+      "reward": 0.48,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T15:05:18.263065"
+    },
+    {
+      "episode": 82,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:17:39.794680"
+    },
+    {
+      "episode": 83,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:18:20.362859"
+    },
+    {
+      "episode": 84,
+      "reward": 0.91,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T15:19:29.538438"
+    },
+    {
+      "episode": 85,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:20:06.377505"
+    },
+    {
+      "episode": 86,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:20:18.032628"
+    },
+    {
+      "episode": 87,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:21:55.329399"
+    },
+    {
+      "episode": 88,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:26:42.472561"
+    },
+    {
+      "episode": 89,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:27:54.845506"
+    },
+    {
+      "episode": 90,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:28:14.489355"
+    },
+    {
+      "episode": 91,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T15:28:41.537088"
+    },
+    {
+      "episode": 92,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T15:31:13.333930"
+    },
+    {
+      "episode": 93,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T15:31:42.832753"
+    },
+    {
+      "episode": 1,
+      "reward": 0.6,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T15:51:33.154370"
+    },
+    {
+      "episode": 2,
+      "reward": 0.53,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T15:57:45.216762"
+    },
+    {
+      "episode": 3,
+      "reward": 0.35,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T16:05:38.174858"
+    },
+    {
+      "episode": 1,
+      "reward": 0.6,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T16:10:22.024987"
+    },
+    {
+      "episode": 2,
+      "reward": 0.53,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T16:13:23.758509"
+    },
+    {
+      "episode": 99,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_tracking",
+      "timestamp": "2026-04-25T16:36:46.205858"
+    },
+    {
+      "episode": 100,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T16:37:20.267229"
     }
   ]
 }

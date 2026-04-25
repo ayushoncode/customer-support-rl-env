@@ -1,0 +1,55 @@
+{
+  "project": "SupportOps AI",
+  "algorithm": "GRPO (custom group-relative update)",
+  "mode": "real",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "episodes_completed": 2,
+  "group_size": 4,
+  "rewards": [
+    0.6,
+    0.53
+  ],
+  "history": [
+    {
+      "episode": 1,
+      "difficulty": "easy",
+      "best_reward": 0.6,
+      "group_rewards": [
+        0.6,
+        0.4,
+        0.4,
+        0.6
+      ],
+      "advantages": [
+        1.0,
+        -1.0,
+        -1.0,
+        1.0
+      ],
+      "best_reply": "Dear Ayush,\n\nThank you for reaching out about your delayed order. We apologize for any inconvenience caused.\n\nUnfortunately, we are experiencing some technical issues with shipping. However, we understand the importance of quality products, so we hope you are satisfied",
+      "timestamp": "2026-04-25T10:40:27.288438Z",
+      "mode": "real"
+    },
+    {
+      "episode": 2,
+      "difficulty": "medium",
+      "best_reward": 0.53,
+      "group_rewards": [
+        0.53,
+        0.48,
+        0.53,
+        0.53
+      ],
+      "advantages": [
+        0.5767,
+        -1.7302,
+        0.5767,
+        0.5767
+      ],
+      "best_reply": "Dear Sara,\n\nThank you so much for contacting us about the incorrect item in your purchase. We apologize for any inconvenience caused.\n\nUnfortunately, we encountered an error while attempting to track your order. After reviewing the records, we realized there was a",
+      "timestamp": "2026-04-25T10:43:23.867159Z",
+      "mode": "real"
+    }
+  ],
+  "updated_at": "2026-04-25T10:43:23.871435Z"
+}

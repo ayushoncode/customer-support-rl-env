@@ -1,8 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import json
+import os
+import re
+import subprocess
+import sys
+from pydantic import BaseModel
 
 from app.env import SupportEnv, TASKS
 from app.models import ResetRequest, StepRequest, SupportAction, RunEpisodeRequest
@@ -24,6 +29,14 @@ app.add_middleware(
 
 env = SupportEnv()
 memory = AgentMemory(max_lessons=10)
+GRPO_REWARDS_FILE = "grpo_rewards.json"
+
+
+class RunGRPORequest(BaseModel):
+    episodes: int = 20
+    group_size: int = 4
+    mock: bool = False
+
 
 @app.get("/dashboard")
 def dashboard():
@@ -95,6 +108,10 @@ def run_full_episode(request: RunEpisodeRequest = None):
         "frustration": result["frustration"],
         "qa_retries": transcript.get("qa_retries", 0),
         "escalation_used": transcript.get("escalation_used", False),
+        "escalation_reason": transcript.get("escalation_reason", ""),
+        "escalation_action": transcript.get("escalation_action", ""),
+        "resolver_source": transcript.get("resolver_source", ""),
+        "resolver_error": transcript.get("resolver_error", ""),
         "memory_size": len(memory.lessons),
     }
 
@@ -113,6 +130,93 @@ def list_tasks():
                 "email": task["email"],
             })
     return {"tasks": all_tasks, "total": len(all_tasks)}
+
+
+@app.get("/grpo_rewards")
+def get_grpo_rewards():
+    if not os.path.exists(GRPO_REWARDS_FILE):
+        return JSONResponse(
+            status_code=200,
+            content={
+                "project": "SupportOps AI",
+                "algorithm": "GRPO",
+                "episodes_completed": 0,
+                "rewards": [],
+                "history": [],
+            },
+        )
+    try:
+        with open(GRPO_REWARDS_FILE, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        return payload
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read {GRPO_REWARDS_FILE}: {e}")
+
+
+@app.post("/run_grpo")
+def run_grpo(request: RunGRPORequest = RunGRPORequest()):
+    script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "grpo_train.py")
+    if not os.path.exists(script_path):
+        raise HTTPException(status_code=404, detail="grpo_train.py not found")
+
+    cmd = [
+        sys.executable,
+        script_path,
+        "--episodes",
+        str(request.episodes),
+        "--group-size",
+        str(request.group_size),
+    ]
+    if request.mock:
+        cmd.append("--mock")
+
+    def sse_stream():
+        try:
+            proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+            )
+        except Exception as e:
+            yield f"event: error\ndata: Failed to start GRPO subprocess: {e}\n\n"
+            return
+
+        episode_re = re.compile(r"\[GRPO\]\s+Episode\s+(\d+)\s*/\s*(\d+)", re.IGNORECASE)
+        total_hint = max(1, request.episodes)
+
+        try:
+            assert proc.stdout is not None
+            for raw_line in proc.stdout:
+                line = raw_line.rstrip("\n")
+                safe_line = line.replace("\r", " ")
+                yield f"event: log\ndata: {safe_line}\n\n"
+
+                m = episode_re.search(line)
+                if m:
+                    done = int(m.group(1))
+                    total = int(m.group(2)) if m.group(2).isdigit() else total_hint
+                    progress_payload = json.dumps({
+                        "completed": done,
+                        "total": total,
+                        "percent": round((done / max(1, total)) * 100, 2),
+                    })
+                    yield f"event: progress\ndata: {progress_payload}\n\n"
+
+            return_code = proc.wait()
+            if return_code == 0:
+                yield "event: done\ndata: GRPO training completed\n\n"
+            else:
+                yield f"event: error\ndata: GRPO training exited with code {return_code}\n\n"
+        except Exception as e:
+            yield f"event: error\ndata: Streaming failed: {e}\n\n"
+        finally:
+            if proc.poll() is None:
+                proc.kill()
+
+    return StreamingResponse(sse_stream(), media_type="text/event-stream")
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=7860, reload=False)
