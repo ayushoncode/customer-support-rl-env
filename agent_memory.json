@@ -1,74 +1,74 @@
 {
   "lessons": [
     {
-      "lesson": "For fraud tickets, ensure you explicitly state \"your account has been secured\" before explaining the next steps \u2014 this provides immediate reassurance and improves the security score by 0.15.",
-      "episode": 14,
-      "reward": 0.74,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T09:22:46.191916"
-    },
-    {
-      "lesson": "For missing item tickets, after acknowledging the customer's frustration, immediately provide a clear next step, such as \"I have initiated a carrier investigation and will update you within 24 hours with the case number and expected resolution timeline.\"",
-      "episode": 15,
+      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
+      "episode": 27,
       "reward": 0.75,
       "difficulty": "hard",
-      "timestamp": "2026-04-25T09:23:48.521818"
+      "timestamp": "2026-04-25T12:09:55.072664"
     },
     {
-      "lesson": "For fraud tickets, ensure you mention the immediate steps being taken to resolve the issue, such as \"I have initiated a temporary hold on your account to prevent further unauthorized transactions\" before explaining the escalation process.",
-      "episode": 16,
-      "reward": 0.67,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T09:24:24.779458"
-    },
-    {
-      "lesson": "For fraud tickets, after securing the account, explicitly state the next steps being taken, such as \"I have also initiated a temporary hold to prevent further unauthorized transactions and escalated this case to our senior fraud team for immediate review.\"",
-      "episode": 17,
-      "reward": 0.74,
-      "difficulty": "hard",
-      "timestamp": "2026-04-25T09:25:40.387296"
-    },
-    {
-      "lesson": "For billing tickets, after apologizing and acknowledging the customer's frustration, specify the exact steps being taken to resolve the issue \u2014 say, \"I will initiate a full refund for the duplicate charge on your order ORD-6612, and you should see the refund reflected in your account within 3-5 business days.\"",
-      "episode": 18,
-      "reward": 0.88,
-      "difficulty": "medium",
-      "timestamp": "2026-04-25T09:26:17.603774"
-    },
-    {
-      "lesson": "For refund tickets, ensure the reply is complete by providing a clear next step or offer additional assistance \u2014 incomplete responses lower the 'Complete' score. For example, add: \"Please let me know if there\u2019s anything else I can assist you with today.\"",
-      "episode": 19,
-      "reward": 1.0,
-      "difficulty": "easy",
-      "timestamp": "2026-04-25T09:31:54.630425"
-    },
-    {
-      "lesson": "For wrong_item tickets, always confirm the return process and provide a prepaid return label information \u2014 this increases customer satisfaction by 0.10 and reduces frustration by 15 points.",
-      "episode": 20,
-      "reward": 0.88,
-      "difficulty": "medium",
-      "timestamp": "2026-04-25T09:32:44.600958"
-    },
-    {
-      "lesson": "For refund tickets, ensure the refund amount and processing time are clearly stated upfront to reduce customer frustration \u2014 starting with \"I will initiate a full refund of $89.99, which should be reflected in your account within 3-5 business days\" can improve the frustration shift score.",
-      "episode": 21,
-      "reward": 1.0,
-      "difficulty": "easy",
-      "timestamp": "2026-04-25T09:34:34.436025"
-    },
-    {
-      "lesson": "For tracking tickets, when requesting the order number, also offer to escalate the issue if not resolved within 24 hours \u2014 this shows proactivity and can increase solution quality by 0.10.",
-      "episode": 22,
-      "reward": 0.7,
-      "difficulty": "easy",
-      "timestamp": "2026-04-25T09:35:20.715085"
-    },
-    {
-      "lesson": "For missing order tickets, ensure to provide a clear next step after escalation, such as \"They will review your case and contact you within 24 hours to resolve the issue.\" This improves the completeness score by 0.15.",
-      "episode": 23,
+      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
+      "episode": 28,
       "reward": 0.75,
       "difficulty": "hard",
-      "timestamp": "2026-04-25T09:38:40.505736"
+      "timestamp": "2026-04-25T12:10:20.007321"
+    },
+    {
+      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
+      "episode": 29,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:11:19.359507"
+    },
+    {
+      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
+      "episode": 30,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:11:25.369248"
+    },
+    {
+      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
+      "episode": 31,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:11:31.364882"
+    },
+    {
+      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
+      "episode": 32,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:13:19.313560"
+    },
+    {
+      "lesson": "MISSED: Did not mention account security actions. Next time: always say 'your account has been secured' before discussing refund.",
+      "episode": 33,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:13:24.679200"
+    },
+    {
+      "lesson": "MISSED: No escalation or SLA commitment. Next time: explicitly escalate to senior team and commit to 48-hour resolution.",
+      "episode": 34,
+      "reward": 0.75,
+      "difficulty": "hard",
+      "timestamp": "2026-04-25T12:13:31.746290"
+    },
+    {
+      "lesson": "Wrong item tickets: offer replacement AND prepaid return label in the same sentence \u2014 removing all friction maximises solution score.",
+      "episode": 35,
+      "reward": 0.84,
+      "difficulty": "medium",
+      "timestamp": "2026-04-25T12:13:37.445199"
+    },
+    {
+      "lesson": "MISSED: Did not confirm the duplicate charge was found. Next time: say 'I have confirmed the duplicate charge on your account' first. | Legal/fraud keywords detected but escalation missing \u2014 always mention senior team for these cases. | 3 QA retries added -0.15 penalty.",
+      "episode": 36,
+      "reward": 0.75,
+      "difficulty": "medium",
+      "timestamp": "2026-04-25T12:13:41.612965"
     }
   ],
   "episode_history": [
@@ -232,6 +232,97 @@
       "difficulty": "hard",
       "task_id": "hard_missing_laptop",
       "timestamp": "2026-04-25T09:38:40.512120"
+    },
+    {
+      "episode": 24,
+      "reward": 1.0,
+      "difficulty": "easy",
+      "task_id": "easy_refund",
+      "timestamp": "2026-04-25T12:09:37.299033"
+    },
+    {
+      "episode": 25,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T12:09:43.461810"
+    },
+    {
+      "episode": 26,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T12:09:48.782440"
+    },
+    {
+      "episode": 27,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T12:09:55.074572"
+    },
+    {
+      "episode": 28,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T12:10:20.010081"
+    },
+    {
+      "episode": 29,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T12:11:19.362764"
+    },
+    {
+      "episode": 30,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T12:11:25.372700"
+    },
+    {
+      "episode": 31,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T12:11:31.366939"
+    },
+    {
+      "episode": 32,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T12:13:19.317922"
+    },
+    {
+      "episode": 33,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_fraud",
+      "timestamp": "2026-04-25T12:13:24.680849"
+    },
+    {
+      "episode": 34,
+      "reward": 1.0,
+      "difficulty": "hard",
+      "task_id": "hard_missing_laptop",
+      "timestamp": "2026-04-25T12:13:31.748085"
+    },
+    {
+      "episode": 35,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_wrong_item",
+      "timestamp": "2026-04-25T12:13:37.446913"
+    },
+    {
+      "episode": 36,
+      "reward": 1.0,
+      "difficulty": "medium",
+      "task_id": "medium_billing",
+      "timestamp": "2026-04-25T12:13:41.614708"
     }
   ]
 }

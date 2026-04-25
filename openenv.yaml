@@ -1,8 +1,9 @@
 name: CustomerSupportEnv
-version: "1.0.0"
+version: "2.0.0"
 description: >
-  An RL environment where an AI agent must respond to customer support emails
-  with empathy, correct solutions, and professional language.
+  A multi-agent customer support operations environment where an agent must
+  research, tag, draft, and submit policy-aware replies while handling
+  escalation, frustration, and critic-memory driven self-improvement.
 
 endpoints:
   reset:
@@ -17,6 +18,12 @@ endpoints:
   health:
     method: GET
     path: /health
+  dashboard:
+    method: GET
+    path: /dashboard
+  run_episode:
+    method: POST
+    path: /run_episode
 
 observation_space:
   email:
@@ -27,14 +34,37 @@ observation_space:
     type: string
   task_id:
     type: string
+  order_info:
+    type: object
+  policy_snippet:
+    type: string
+  frustration_meter:
+    type: number
+  valid_actions:
+    type: array
 
 action_space:
+  action_type:
+    type: string
+    enum: [RESEARCH, TAG, DRAFT, SUBMIT]
+  reasoning:
+    type: string
   reply:
+    type: string
+  order_id:
+    type: string
+  tag:
     type: string
 
 reward:
-  range: [0.0, 1.0]
+  range: [-1.0, 1.0]
   components:
+    - name: research
+      weight: 0.1
+    - name: tag
+      weight: 0.1
+    - name: draft
+      weight: 0.15
     - name: empathy
       weight: 0.3
     - name: solution
@@ -43,6 +73,12 @@ reward:
       weight: 0.2
     - name: personalisation
       weight: 0.1
+    - name: hallucination_penalty
+      weight: -0.15
+    - name: policy_penalty
+      weight: -0.3
+    - name: qa_retry_penalty
+      weight: -0.05
 
 tasks:
   - id: easy_refund
@@ -60,8 +96,8 @@ tasks:
 
 environment_variables:
   API_BASE_URL:
-    required: true
+    required: false
   MODEL_NAME:
-    required: true
+    required: false
   HF_TOKEN:
-    required: true
+    required: false

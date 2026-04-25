@@ -51,6 +51,7 @@ Those lessons are stored in memory and injected back into later runs, so the sys
 - Critic memory loop via `memory.py`
 - Difficulty-aware tasks: `easy`, `medium`, `hard`
 - Dynamic frustration meter
+- Minimal HF TRL training example in `trl_training_example.py`
 - Dockerfile ready for local Docker and Hugging Face Spaces
 
 ## API
@@ -119,6 +120,34 @@ The critic flow is:
 
 This is the core self-improvement mechanic in the project.
 
+## Hackathon Theme Fit
+
+This project aligns most strongly with:
+
+- `Theme #1 - Multi-Agent Interactions`
+- `Theme #3.1 - World Modeling / Professional Tasks`
+- `Theme #4 - Self-Improvement`
+
+Why:
+
+- multiple agents coordinate under partial observability
+- the environment models a realistic professional workflow
+- the critic writes lessons that influence later behavior
+
+## Judge-Ready Assets
+
+The repo now includes:
+
+- [JUDGE_READY_CHECKLIST.md](/Users/ayush/support_env/JUDGE_READY_CHECKLIST.md:1) for final submission prep
+- [trl_training_example.py](/Users/ayush/support_env/trl_training_example.py:1) as a minimal HF TRL-compatible training path
+
+Before final submission, add these links to this README:
+
+- Hugging Face Space URL
+- demo video or HF blog link
+- reward plot image(s)
+- baseline vs trained comparison
+
 ## Project Structure
 
 ```text
@@ -175,7 +204,20 @@ http://localhost:7860/dashboard
 python training_loop.py --episodes 15
 ```
 
-### 5. Optional: Run Smoke Test
+### 5. Optional: Collect Data Or Run Minimal TRL Example
+
+```bash
+python trl_training_example.py --episodes 24 --output artifacts/train_data.jsonl
+```
+
+To actually fine-tune in Colab or a GPU environment:
+
+```bash
+pip install trl transformers datasets accelerate torch
+python trl_training_example.py --episodes 24 --train
+```
+
+### 6. Optional: Run Smoke Test
 
 ```bash
 python smoke_test.py
